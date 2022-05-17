@@ -1,2 +1,2 @@
-from models.train_model import *
-from models.predict_model import *
+from inference.src.models.train_model import *
+from inference.src.models.predict_model import *

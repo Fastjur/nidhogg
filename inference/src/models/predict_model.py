@@ -7,7 +7,7 @@ from sklearn.metrics import average_precision_score
 from sklearn.metrics import recall_score
 from scipy import sparse
 
-from data.preprocess import preprocess_sentence
+from inference.src.data.preprocess import preprocess_sentence
 
 import pickle
 import pandas as pd
