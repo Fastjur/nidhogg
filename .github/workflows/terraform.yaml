@@ -30,12 +30,12 @@ jobs:
       - name: "Terraform validate"
         id: validate
         working-directory: "terraform"
-        run: terraform validate
+        run: terraform validate -no-color
 
       - name: "Terraform plan"
         id: plan
         working-directory: "terraform"
-        run: terraform plan
+        run: terraform plan -no-color
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
 
