@@ -1,3 +1,5 @@
+name: "Terraform Google Cloud"
+
 on:
   push:
     branches:
