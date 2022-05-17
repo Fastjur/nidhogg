@@ -3,7 +3,6 @@ FROM debian:stable-slim
 # Install Python and pip
 RUN apt-get update && apt-get upgrade -y
 RUN apt install python3-pip python3-venv -y
-# RUN apt install python3-scipy -y
 
 # Update pip and install Python dependencies
 RUN python3 -m venv /opt/venv
