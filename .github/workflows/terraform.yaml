@@ -11,7 +11,7 @@ jobs:
     name: "Terraform"
     runs-on: ubuntu-latest
     permissions:
-      issues: write
+      discussions: write
     steps:
       - uses: hashicorp/setup-terraform@v2
       - uses: actions/checkout@v2
