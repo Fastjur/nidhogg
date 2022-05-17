@@ -1,6 +1,6 @@
 variable "project_id" {
   description = "Project ID"
-  default = "nidhogg-349812"
+  default     = "nidhogg-349812"
 }
 variable "cluster_name" {
   description = "The name for the GKE cluster"
