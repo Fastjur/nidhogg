@@ -16,7 +16,6 @@ COPY inference/data/raw/ /data/raw/
 COPY inference/data/processed/ /data/processed/
 COPY inference/models/ /models/
 COPY inference/src/ /src/
-
 RUN python3 src/run.py --preprocess
 RUN python3 src/run.py --train
 
