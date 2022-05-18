@@ -12,8 +12,8 @@ COPY requirements.txt .
 RUN pip install -r requirements.txt
 
 # Copy application files
-COPY http_server.py .
-COPY index.html .
+COPY http_server/http_server.py .
+COPY http_server/index.html .
 
 # Expose port 8080 where the HTTP server serves
 EXPOSE 8080

@@ -12,10 +12,10 @@ COPY requirements.txt .
 RUN pip3 install -r requirements.txt
 
 # Copy application files
-COPY data/raw/ /data/raw/
-COPY data/processed/ /data/processed/
-COPY models/ /models/
-COPY src/ /src/
+COPY inference/data/raw/ /data/raw/
+COPY inference/data/processed/ /data/processed/
+COPY inference/models/ /models/
+COPY inference/src/ /src/
 
 RUN python3 src/run.py --preprocess
 RUN python3 src/run.py --train
