@@ -1,15 +1,13 @@
-name: "Terraform Google Cloud"
+name: "Terraform Google Cloud - Plan"
 
 on:
-  push:
+  pull_request:
     branches:
       - main
-  pull_request:
 
 jobs:
-  terraform:
-    name: "Terraform"
-    needs: build-and-push-image
+  terraform-plan:
+    name: "Terraform Plan"
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
@@ -97,10 +95,3 @@ jobs:
                 body: output
               })
             }
-      - name: "Terraform apply"
-        id: apply
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        working-directory: "terraform"
-        run: terraform apply -auto-approve
-        env:
-          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}

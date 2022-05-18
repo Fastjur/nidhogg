@@ -2,9 +2,11 @@ name: Create and publish a Docker image
 
 on:
   push:
-    tags: ["v*"]
-    branches: 
-     - main
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 env:
   REGISTRY: ghcr.io
@@ -12,6 +14,7 @@ env:
 
 jobs:
   build-and-push-image:
+    name: "Build and Push Docker Images"
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
