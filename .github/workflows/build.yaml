@@ -45,8 +45,8 @@ jobs:
         with:
           images: ${{ matrix.image }}
           tags: |
-            # set latest tag for default branch
-            type=raw,value=latest,enable={{is_default_branch}}
+            # Create a tag with the git commit hash
+            type=sha
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v3
