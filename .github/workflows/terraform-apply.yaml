@@ -25,7 +25,7 @@ jobs:
 
       - name: "Terraform apply"
         id: apply
-        # Double check to only run on pushtes to main (if someone alters the on push rules above)
+        # Double check to only run on pushes to main (if someone alters the on push rules above)
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         working-directory: "terraform"
         run: terraform apply -auto-approve
