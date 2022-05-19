@@ -8,7 +8,7 @@ RUN apt install python3-pip python3-venv -y
 RUN python3 -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 RUN python3 -m pip install --upgrade pip
-COPY requirements.txt .
+COPY http_server/requirements.txt .
 RUN pip install -r requirements.txt
 
 # Copy application files
