@@ -1,7 +1,7 @@
 resource "kubernetes_service" "example" {
   metadata {
     name      = "backend-service"
-    namespace = "prod"
+    namespace = var.env_name
   }
   spec {
     selector = {
@@ -19,7 +19,7 @@ resource "kubernetes_service" "example" {
 resource "kubernetes_pod" "frontend" {
   metadata {
     name      = "inference-frontend"
-    namespace = "prod"
+    namespace = var.env_name
     labels = {
       App = "inference-frontend"
     }
@@ -32,7 +32,7 @@ resource "kubernetes_pod" "frontend" {
 
       env {
         name  = "environment"
-        value = "prod"
+        value = var.env_name
       }
 
       port {
@@ -63,7 +63,7 @@ resource "kubernetes_pod" "frontend" {
 resource "kubernetes_pod" "example" {
   metadata {
     name      = "inference-backend"
-    namespace = "prod"
+    namespace = var.env_name
     labels = {
       app = "inference-backend"
     }
@@ -76,7 +76,7 @@ resource "kubernetes_pod" "example" {
 
       env {
         name  = "environment"
-        value = "prod"
+        value = var.env_name
       }
 
       port {
