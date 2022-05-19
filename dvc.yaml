@@ -1,0 +1,29 @@
+stages:
+  preprocess:
+    cmd: python3 src/run.py --preprocess
+    deps:
+    - data/
+    - src/preprocess_data.py
+    outs:
+    - outputs/processed_data/
+    - outputs/models/vectorizer.pkl
+  train:
+    cmd: python3 src/run.py --train
+    deps:
+    - src/preprocess_data.py
+    - src/train_model.py
+    - outputs/processed_data/
+    - outputs/models/vectorizer.pkl
+    outs:
+    - outputs/models/tfidf_model.pkl
+  build_backend:
+    cmd: docker build -t nidhogg-backend -f inference/Dockerfile .
+    deps:
+    - src/preprocess_data.py
+    - src/inference_api.py
+    - outputs/models/vectorizer.pkl
+    - outputs/models/tfidf_model.pkl
+  build_frontend:
+    cmd: docker build -t nidhogg-frontend -f frontend/Dockerfile .
+    deps:
+    - frontend/

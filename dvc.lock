@@ -1,0 +1,40 @@
+schema: '2.0'
+stages:
+  preprocess:
+    cmd: python3 src/run.py --preprocess
+    deps:
+    - path: data/
+      md5: 3d9e62a9c241fcfcf634384a95dd4cf4.dir
+      size: 10408878
+      nfiles: 4
+    - path: src/preprocess_data.py
+      md5: 4418185e1646a2c3c53540b858582de9
+      size: 4177
+    outs:
+    - path: outputs/models/vectorizer.pkl
+      md5: 3d153c9e0ca129961bc4477e3c73bea9
+      size: 6039557
+    - path: outputs/processed_data/
+      md5: 7730ae7add1883a1d89e24abfc316802.dir
+      size: 112774922
+      nfiles: 6
+  train:
+    cmd: python3 src/run.py --train
+    deps:
+    - path: outputs/models/vectorizer.pkl
+      md5: 3d153c9e0ca129961bc4477e3c73bea9
+      size: 6039557
+    - path: outputs/processed_data/
+      md5: 7730ae7add1883a1d89e24abfc316802.dir
+      size: 112774922
+      nfiles: 6
+    - path: src/preprocess_data.py
+      md5: 4418185e1646a2c3c53540b858582de9
+      size: 4177
+    - path: src/train_model.py
+      md5: 823fa8ae9ec3737ee04a0939eea0f37b
+      size: 1003
+    outs:
+    - path: outputs/models/tfidf_model.pkl
+      md5: 40c023aa76368aa506f19c1ed2a9ef45
+      size: 21526649

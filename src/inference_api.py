@@ -1,16 +1,20 @@
-import cgi
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import pickle
 import json
-from urllib.parse import urlsplit, parse_qs, urlparse
+from urllib.parse import parse_qs, urlparse
 import numpy as np
 
-from data.preprocess import preprocess_sentence
-from models.predict_model import predict
+from preprocess_data import preprocess_sentence
+from predict_model import predict
+
+# TODO use dependency injection instead of global variables
 
 class S(BaseHTTPRequestHandler):
     def __init__(self, *args):
         BaseHTTPRequestHandler.__init__(self, *args)
+        self.vectorizer = pickle.load(open(f"{global_model_folder}/vectorizer.pkl", "rb"))
+        self.model = pickle.load(open(f"{global_model_folder}/tfidf_model.pkl", "rb"))
+        self.tags = np.loadtxt(global_tags_filename, dtype=str, delimiter="\n")
 
     def _set_response(self):
         self.send_response(200)
@@ -24,7 +28,9 @@ class S(BaseHTTPRequestHandler):
         # get url param
         params = parse_qs(urlparse(self.path).query)
         print(params)
-        labels = predict(" ".join(params['sentence']))
+        sentence = " ".join(params['sentence'])
+        processed_sentence = preprocess_sentence(sentence)
+        labels = predict(processed_sentence, self.vectorizer, self.model, self.tags)
 
         response = {
             "Tags" : labels
@@ -47,8 +53,12 @@ class S(BaseHTTPRequestHandler):
 
         #self.wfile.write("POST request for {}".format(self.path).encode('utf-8'))
 
-def run(server_class=HTTPServer, handler_class=S, port=8080):
+def run(model_folder, tags_filename, server_class=HTTPServer, handler_class=S, port=8080):
+    global global_model_folder, global_tags_filename
+    global_model_folder = model_folder
+    global_tags_filename = tags_filename
     server_address = ('', port)
+    HTTPServer()
     httpd = server_class(server_address, handler_class)
     print('Starting httpd...\n')
     try:
@@ -57,6 +67,3 @@ def run(server_class=HTTPServer, handler_class=S, port=8080):
         pass
     httpd.server_close()
     print('Stopping httpd...\n')
-
-def serve(port=8080):
-    run(port=port)
