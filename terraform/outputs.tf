@@ -1,3 +1,4 @@
-output "public_url" {
-  value = "https://${google_compute_address.nidhogg-external-address.address}"
+output "cluster_name" {
+  description = "Cluster name"
+  value       = module.gke.name
 }
