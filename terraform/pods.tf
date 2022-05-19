@@ -1,7 +1,6 @@
 resource "kubernetes_service" "example" {
   metadata {
     name      = "backend-service"
-    namespace = "prod"
   }
   spec {
     selector = {
@@ -19,7 +18,6 @@ resource "kubernetes_service" "example" {
 resource "kubernetes_pod" "frontend" {
   metadata {
     name      = "inference-frontend"
-    namespace = "prod"
     labels = {
       App = "inference-frontend"
     }
@@ -63,7 +61,6 @@ resource "kubernetes_pod" "frontend" {
 resource "kubernetes_pod" "example" {
   metadata {
     name      = "inference-backend"
-    namespace = "prod"
     labels = {
       app = "inference-backend"
     }
