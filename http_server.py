@@ -43,7 +43,7 @@ class Server(BaseHTTPRequestHandler):
             logging.info(f"(parsed) received question: {parsed_data}")
 
             data = parse.urlencode(post_data).encode()
-            req = request.Request("http://localhost:8080/", data=data)
+            req = request.Request("http://inference-backend:8080", data=data)
             with request.urlopen(req) as resp:
                 # send the message back
                 self._set_headers(resp)
