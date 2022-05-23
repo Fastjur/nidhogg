@@ -19,6 +19,7 @@ stages:
   build_backend:
     cmd: docker build -t nidhogg-backend -f inference/Dockerfile .
     deps:
+    - inference/Dockerfile
     - src/preprocess_data.py
     - src/inference_api.py
     - outputs/models/vectorizer.pkl
