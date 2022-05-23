@@ -3,6 +3,17 @@ provider "google" {
   region  = "europe-west1"
 }
 
+resource "helm_release" "prometheus" {
+  name       = "prometheus"
+  repository = "https://prometheus-community.github.io/helm-charts"
+  chart      = "kube-prometheus-stack"
+
+  set {
+    name = "grafana.service.type"
+    value = "NodePort"
+  }
+}
+
 terraform {
   required_providers {
     docker = {
@@ -29,6 +40,15 @@ provider "kubernetes" {
   host                   = module.gke_auth.host
   token                  = module.gke_auth.token
 }
+
+provider "helm" {
+  kubernetes {
+    cluster_ca_certificate = module.gke_auth.cluster_ca_certificate
+    host                   = module.gke_auth.host
+    token                  = module.gke_auth.token
+  }
+}
+
 
 provider "docker" {
   host = "ghcr.io/Fastjur"
@@ -73,11 +93,11 @@ module "gke" {
   node_pools = [
     {
       name           = "node-pool"
-      machine_type   = "e2-micro"
+      machine_type   = "e2-small"
       node_locations = "europe-west1-b,europe-west1-c,europe-west1-d"
       min_count      = 1
-      max_count      = 2
-      disk_size_gb   = 30
+      max_count      = 3
+      disk_size_gb   = 60
     },
   ]
 }

@@ -15,6 +15,23 @@ resource "kubernetes_service" "example" {
   }
 }
 
+resource "kubernetes_service" "grafana" {
+  metadata {
+    name      = "grafana-service"
+  }
+  spec {
+    selector = {
+      "app.kubernetes.io/name" = "grafana"
+    }
+    session_affinity = "ClientIP"
+    port {
+      port        = 80
+      target_port = 3000
+    }
+    type = "LoadBalancer"
+  }
+}
+
 resource "kubernetes_pod" "frontend" {
   metadata {
     name      = "inference-frontend"
