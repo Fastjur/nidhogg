@@ -11,17 +11,16 @@ RUN python3 -m pip install --upgrade pip
 COPY inference/requirements.txt .
 RUN pip3 install -r requirements.txt
 
-# Copy application files
-COPY inference/data/raw/ /data/raw/
-COPY inference/data/processed/ /data/processed/
-COPY inference/models/ /models/
-COPY inference/src/ /src/
-RUN python3 src/run.py --preprocess
-RUN python3 src/run.py --train
+# Copy application files and trained models
+COPY src/preprocess_data.py .
+COPY src/inference_api.py .
+COPY src/run.py .
+COPY outputs/models/vectorizer.pkl .
+COPY outputs/models/tfidf_model.pkl .
 
 # Expose port 8080 where the HTTP server serves
 EXPOSE 8080
 
 # Start Python HTTP server application
 ENTRYPOINT ["python3"]
-CMD ["src/run.py", "--serve"]
+CMD ["run.py", "--serve"]
