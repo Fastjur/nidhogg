@@ -13,7 +13,8 @@ RUN pip install -r requirements.txt
 
 # Copy application files
 COPY src/frontend.py .
-COPY src/index.html .
+RUN mkdir frontend
+COPY src/frontend/ ./frontend/
 
 # Expose port 8080 where the HTTP server serves
 EXPOSE 8080

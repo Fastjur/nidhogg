@@ -4,33 +4,39 @@ import json
 from urllib.parse import parse_qs, urlparse
 import numpy as np
 
-from preprocess_data import preprocess_sentence
-from predict_model import predict
+from common.preprocessing import preprocess_sentence
+from common.predicting import predict
 
 # TODO use dependency injection instead of global variables
 
 class S(BaseHTTPRequestHandler):
     def __init__(self, *args):
         BaseHTTPRequestHandler.__init__(self, *args)
-        self.vectorizer = pickle.load(open(f"{global_model_folder}/vectorizer.pkl", "rb"))
-        self.model = pickle.load(open(f"{global_model_folder}/tfidf_model.pkl", "rb"))
-        self.tags = np.loadtxt(global_tags_filename, dtype=str, delimiter="\n")
 
     def _set_response(self):
         self.send_response(200)
         self.send_header('Content-type', 'application/json')
         self.end_headers()
 
+    def load_models(self):
+        if not hasattr(self, "vectorizer"):
+            self.vectorizer = pickle.load(open(f"{global_model_folder}/vectorizer.pkl", "rb"))
+            self.model = pickle.load(open(f"{global_model_folder}/tfidf_model.pkl", "rb"))
+            self.tags = np.loadtxt(global_tags_filename, dtype=str, delimiter="\n")
+            print("[Inference] Loaded models")
+
     def do_GET(self):
         self._set_response()
 
-        #sentence = preprocess_sentence("What dies my JS compiler have in common with Pytorch?", vectorizer)
-        # get url param
         params = parse_qs(urlparse(self.path).query)
         print(params)
+        if len(params) < 1:
+            return
+
+        self.load_models()
         sentence = " ".join(params['sentence'])
-        processed_sentence = preprocess_sentence(sentence)
-        labels = predict(processed_sentence, self.vectorizer, self.model, self.tags)
+        processed_sentence = preprocess_sentence(sentence, self.vectorizer)
+        labels = predict(processed_sentence, self.model, self.tags)
 
         response = {
             "Tags" : labels
@@ -58,7 +64,6 @@ def run(model_folder, tags_filename, server_class=HTTPServer, handler_class=S, p
     global_model_folder = model_folder
     global_tags_filename = tags_filename
     server_address = ('', port)
-    HTTPServer()
     httpd = server_class(server_address, handler_class)
     print('Starting httpd...\n')
     try:
@@ -67,3 +72,9 @@ def run(model_folder, tags_filename, server_class=HTTPServer, handler_class=S, p
         pass
     httpd.server_close()
     print('Stopping httpd...\n')
+
+# TODO merge code below with run method
+if __name__ == "__main__":
+    processed_data_folder = "./outputs/processed_data"
+    model_folder = "./outputs/models"
+    run(model_folder, f"{processed_data_folder}/tags.txt")

@@ -12,9 +12,9 @@ COPY requirements.txt .
 RUN pip3 install -r requirements.txt
 
 # Copy application files and trained models
-COPY src/preprocess_data.py .
 COPY src/inference_api.py .
-COPY src/run.py .
+RUN mkdir common
+COPY src/common/ ./common/
 COPY outputs/models/vectorizer.pkl .
 COPY outputs/models/tfidf_model.pkl .
 
@@ -23,4 +23,4 @@ EXPOSE 8080
 
 # Start Python HTTP server application
 ENTRYPOINT ["python3"]
-CMD ["run.py", "--serve"]
+CMD ["inference_api.py"]

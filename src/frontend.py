@@ -26,7 +26,7 @@ class Server(BaseHTTPRequestHandler):
         # If root path is called, then we serve the index.html file back.
         self._set_response()
         if(self.path == "/"):
-            f = open(curdir + sep + "./index.html", 'rb')
+            f = open(curdir + sep + "./frontend/index.html", 'rb')
             self.wfile.write(f.read())
         else:
             self.wfile.write("GET request for {}\n".format(self.path).encode('utf-8'))

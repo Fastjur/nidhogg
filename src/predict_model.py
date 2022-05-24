@@ -7,6 +7,8 @@ from scipy import sparse
 
 from preprocess_data import preprocess_sentence
 
+# TODO add evaluation of model to train file
+
 def print_evaluation_scores(y_val, predicted):
     print('Accuracy score: ', accuracy_score(y_val, predicted))
     print('F1 score: ', f1_score(y_val, predicted, average='weighted'))
@@ -22,14 +24,3 @@ def evaluate():
     y_val_predicted_labels_tfidf = clf.predict(X_val_tfidf)
     y_val_predicted_scores_tfidf = clf.decision_function(X_val_tfidf)
     print_evaluation_scores(y_val, y_val_predicted_labels_tfidf)
-
-def predict(sentence, vectorizer, model, tags):
-    sentence = preprocess_sentence(sentence, vectorizer)
-    prediction = model.predict(sentence)
-    
-    # TODO optimize: output = tags[prediction[0]]
-    output = []
-    for i, p in enumerate(prediction[0]):
-        if p == 1:
-            output.append(tags[i])
-    return output
