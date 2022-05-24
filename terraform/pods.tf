@@ -6,7 +6,6 @@ resource "kubernetes_service" "example" {
     selector = {
       app = kubernetes_pod.example.metadata.0.labels.app
     }
-    session_affinity = "ClientIP"
     port {
       port        = 8080
       target_port = 8080
@@ -23,9 +22,8 @@ resource "kubernetes_service" "grafana" {
     selector = {
       "app.kubernetes.io/name" = "grafana"
     }
-    session_affinity = "ClientIP"
     port {
-      port        = 80
+      port        = 3000
       target_port = 3000
     }
     type = "LoadBalancer"
@@ -80,6 +78,11 @@ resource "kubernetes_pod" "example" {
     name      = "inference-backend"
     labels = {
       app = "inference-backend"
+    }
+    annotations = {
+      "prometheus.io/scrape" = "true"
+      "prometheus.io/port"   = "8080"
+      "prometheus.io/path"   = "/metrics"
     }
   }
 
