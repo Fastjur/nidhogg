@@ -3,6 +3,7 @@ import pickle
 import json
 from urllib.parse import parse_qs, urlparse
 import numpy as np
+import sys
 
 from common.preprocessing import preprocess_sentence
 from common.predicting import predict
@@ -75,6 +76,10 @@ def run(model_folder, tags_filename, server_class=HTTPServer, handler_class=S, p
 
 # TODO merge code below with run method
 if __name__ == "__main__":
-    processed_data_folder = "./outputs/processed_data"
-    model_folder = "./outputs/models"
-    run(model_folder, f"{processed_data_folder}/tags.txt")
+    if len(sys.argv) != 3:
+        print("Usage: python src/inference_api.py [model_folder] [tags_file]")
+        exit(1)
+    
+    model_folder = sys.argv[1]
+    tags_file = sys.argv[2]
+    run(model_folder, tags_file)

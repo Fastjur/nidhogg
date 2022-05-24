@@ -78,8 +78,8 @@ stages:
     cmd: docker build -t nidhogg-inference -f docker/inference.Dockerfile .
     deps:
     - path: docker/inference.Dockerfile
-      md5: 61df04af4be564fe6b76dd2bd847c1fc
-      size: 685
+      md5: 9feb5a47760c178f7a03ff465c8b1b36
+      size: 744
     - path: outputs/models/tfidf_model.pkl
       md5: 40c023aa76368aa506f19c1ed2a9ef45
       size: 21526649
@@ -91,5 +91,5 @@ stages:
       size: 3115
       nfiles: 4
     - path: src/inference_api.py
-      md5: e6bf0c90798901539b8dcbf17eac2778
-      size: 2732
+      md5: e7e7e45835f26ffae02ea77ed7248847
+      size: 2810

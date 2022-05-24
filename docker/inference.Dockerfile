@@ -15,6 +15,7 @@ RUN pip3 install -r requirements.txt
 COPY src/inference_api.py .
 RUN mkdir common
 COPY src/common/ ./common/
+COPY outputs/processed_data/tags.txt .
 COPY outputs/models/vectorizer.pkl .
 COPY outputs/models/tfidf_model.pkl .
 
@@ -23,4 +24,4 @@ EXPOSE 8080
 
 # Start Python HTTP server application
 ENTRYPOINT ["python3"]
-CMD ["inference_api.py"]
+CMD ["inference_api.py", "./", "./tags.txt"]
