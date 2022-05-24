@@ -1,7 +1,8 @@
+import cgi
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import pickle
 import json
-from urllib.parse import parse_qs, urlparse
+from urllib.parse import urlsplit, parse_qs, urlparse
 import numpy as np
 
 from preprocess_data import preprocess_sentence
@@ -28,37 +29,42 @@ class S(BaseHTTPRequestHandler):
         # get url param
         params = parse_qs(urlparse(self.path).query)
         print(params)
-        sentence = " ".join(params['sentence'])
-        processed_sentence = preprocess_sentence(sentence)
-        labels = predict(processed_sentence, self.vectorizer, self.model, self.tags)
+        if params != {}:
+            sentence = " ".join(params['sentence'])
+            processed_sentence = preprocess_sentence(sentence)
+            labels = predict(processed_sentence, self.vectorizer, self.model, self.tags)
 
-        response = {
-            "Tags" : labels
-        }
-        json_str=json.dumps(response)
-        self.wfile.write(json_str.encode('utf-8'))
+            response = {
+                "Tags" : labels
+            }
+            json_str=json.dumps(response)
+            self.wfile.write(json_str.encode('utf-8'))
+        else:
+            print("Empty params for get request.")
 
     def do_POST(self):
-        content_length = int(self.headers['Content-Length']) # <--- Gets the size of data
         content_len = int(self.headers['content-length'])
-        post_body = self.rfile.read(content_len)
-        labels = predict(str(post_body))
+        post_body = json.loads(self.rfile.read(content_len))
+        if "question" in post_body:
+            labels = predict(str(post_body))
 
-        response = {
-            "tags" : labels
-        }
-        json_str=json.dumps(response)
-        self._set_response()
-        self.wfile.write(json_str.encode('utf-8'))
+            response = {
+                "tags" : labels
+            }
+            json_str=json.dumps(response)
+            self._set_response()
+            self.wfile.write(json_str.encode('utf-8'))
 
-        #self.wfile.write("POST request for {}".format(self.path).encode('utf-8'))
+            #self.wfile.write("POST request for {}".format(self.path).encode('utf-8'))
+        else:
+            print(f"Received data did not have a question. content: {post_body}")
 
 def run(model_folder, tags_filename, server_class=HTTPServer, handler_class=S, port=8080):
     global global_model_folder, global_tags_filename
     global_model_folder = model_folder
     global_tags_filename = tags_filename
     server_address = ('', port)
-    HTTPServer()
+    HTTPServer() #TODO: is this necessary? Maybe get rid of it
     httpd = server_class(server_address, handler_class)
     print('Starting httpd...\n')
     try:

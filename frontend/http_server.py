@@ -3,6 +3,7 @@ import logging
 from os import curdir, sep
 
 from urllib.parse import parse_qs
+from urllib import request, parse
 
 hostName = "localhost"
 serverPort = 8080
@@ -33,19 +34,19 @@ class Server(BaseHTTPRequestHandler):
 
     def do_POST(self):
         content_length = int(self.headers['Content-Length'])  # <--- Gets the size of data
-        post_data = self.rfile.read(content_length)  # <--- Gets the data itself
+        post_data = {"question": self.rfile.read(content_length)}  # <--- Gets the data itself
         logging.info("POST request,\nPath: %s\nHeaders:\n%s\n\nBody:\n%s\n",
-                     str(self.path), str(self.headers), post_data.decode('utf-8'))
+                     str(self.path), str(self.headers), post_data["question"].decode('utf-8'))
 
         if(self.path == "/predict"):
-            # TODO: Call model here with provided data (should be in post_data I think)
-            # For now just echoes back the provided input data
-            parsed_data = parse_qs(post_data.decode('utf-8'))
+            parsed_data = parse_qs(post_data["question"].decode('utf-8'))
             logging.info(f"(parsed) received data: {parsed_data}")
 
-            # send the message back
-            self._set_headers(parsed_data)
-            pass
+            data = parse.urlencode(post_data).encode()
+            req = request.Request("http://inference-service:8080/", data=data)
+            with request.urlopen(req) as resp:
+                # send the message back
+                self._set_headers(resp)
         else:
             self._set_response()
             self.wfile.write("POST request for {}\n".format(self.path).encode('utf-8'))
