@@ -1,0 +1,77 @@
+name: Run mllint
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  mllint:
+    name: "Run mllint"
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: "Checkout code"
+        uses: actions/checkout@v3
+
+      - name: "Install python"
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.7"
+          cache: pip
+
+      - name: "Install mllint"
+        run: pip install --upgrade mllint
+
+      - name: "Run mllint"
+        run: mllint -o mllint.md
+
+      - name: "Sanitize mllint output"
+        run: |
+          sed 's/`/\\`/g' mllint.md > mllint-sanitized.md
+
+      - name: "Read the mllint report"
+        id: read-mllint-report
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: ./mllint-sanitized.md
+
+      - name: "Update PR with mllint output"
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            // 1. Retrieve existing bot comment if it exists
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            })
+            const botComment = comments.find(comment => {
+              return comment.user.type === 'Bot' && comment.body.includes('ML Project Report')
+            })
+
+            const mllintReport = `
+              <details><summary>ML Lint output:</summary>
+
+              ${{ steps.read-mllint-report.outputs.content }}
+
+              </details>`;
+
+            // 3. If we have a comment, update it, otherwise create a new one
+            if (botComment) {
+              github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: mllintReport
+              })
+            } else {
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: mllintReport
+              })
+            }
