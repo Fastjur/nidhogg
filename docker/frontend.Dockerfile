@@ -8,19 +8,16 @@ RUN apt install python3-pip python3-venv -y
 RUN python3 -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 RUN python3 -m pip install --upgrade pip
-COPY inference/requirements.txt .
-RUN pip3 install -r requirements.txt
+COPY requirements.txt .
+RUN pip install -r requirements.txt
 
-# Copy application files and trained models
-COPY src/preprocess_data.py .
-COPY src/inference_api.py .
-COPY src/run.py .
-COPY outputs/models/vectorizer.pkl .
-COPY outputs/models/tfidf_model.pkl .
+# Copy application files
+COPY src/frontend.py .
+COPY src/index.html .
 
 # Expose port 8080 where the HTTP server serves
 EXPOSE 8080
 
 # Start Python HTTP server application
 ENTRYPOINT ["python3"]
-CMD ["run.py", "--serve"]
+CMD ["frontend.py"]

@@ -16,15 +16,15 @@ stages:
     - outputs/models/vectorizer.pkl
     outs:
     - outputs/models/tfidf_model.pkl
-  build_backend:
-    cmd: docker build -t nidhogg-backend -f inference/Dockerfile .
+  build_inference:
+    cmd: docker build -t nidhogg-inference -f docker/inference.Dockerfile .
     deps:
-    - inference/Dockerfile
+    - docker/inference.Dockerfile
     - src/preprocess_data.py
     - src/inference_api.py
     - outputs/models/vectorizer.pkl
     - outputs/models/tfidf_model.pkl
   build_frontend:
-    cmd: docker build -t nidhogg-frontend -f frontend/Dockerfile .
+    cmd: docker build -t nidhogg-frontend -f docker/frontend.Dockerfile .
     deps:
-    - frontend/
+    - docker/frontend.Dockerfile
