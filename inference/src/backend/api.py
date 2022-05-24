@@ -17,21 +17,6 @@ class S(BaseHTTPRequestHandler):
         self.send_header('Content-type', 'application/json')
         self.end_headers()
 
-    def do_GET(self):
-        self._set_response()
-
-        #sentence = preprocess_sentence("What dies my JS compiler have in common with Pytorch?", vectorizer)
-        # get url param
-        params = parse_qs(urlparse(self.path).query)
-        print(params)
-        labels = predict(" ".join(params['sentence']))
-
-        response = {
-            "Tags" : labels
-        }
-        json_str=json.dumps(response)
-        self.wfile.write(json_str.encode('utf-8'))
-
     def do_POST(self):
         content_length = int(self.headers['Content-Length']) # <--- Gets the size of data
         content_len = int(self.headers['content-length'])
