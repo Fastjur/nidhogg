@@ -12,5 +12,5 @@ def predict():
     question = request.form.get("input")
     url = "http://inference-service:8080/"
     data = {"question": question}
-    response = requests.post(url, data=data, headers={"Content-Type": "form-data"})
+    response = requests.post(url, data=data)
     return render_template("index.html", answer=response.text)

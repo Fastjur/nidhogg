@@ -1,6 +1,11 @@
 resource "kubernetes_service" "inference-service" {
   metadata {
     name      = "inference-service"
+    annotations = {
+      "prometheus.io/scrape" = "true"
+      "prometheus.io/port"   = "8080"
+      "prometheus.io/path"   = "/metrics"
+    }
   }
   spec {
     selector = {
@@ -60,11 +65,6 @@ resource "kubernetes_pod" "frontend" {
       name  = "inference-frontend"
       image_pull_policy = var.use_local_containers ? "Never" : "IfNotPresent"
 
-      env {
-        name  = "environment"
-        value = "prod"
-      }
-
       port {
         container_port = 5000
       }
@@ -80,6 +80,7 @@ resource "kubernetes_pod" "inference" {
     labels = {
       app = "inference-backend"
     }
+    
     annotations = {
       "prometheus.io/scrape" = "true"
       "prometheus.io/port"   = "8080"
@@ -92,11 +93,6 @@ resource "kubernetes_pod" "inference" {
       image = var.use_local_containers ? "nidhogg-inference:latest" : "ghcr.io/fastjur/nidhogg-inference:latest"
       name  = "inference-backend"
       image_pull_policy = var.use_local_containers ? "Never" : "IfNotPresent"
-
-      env {
-        name  = "environment"
-        value = "prod"
-      }
 
       port {
         container_port = 8080

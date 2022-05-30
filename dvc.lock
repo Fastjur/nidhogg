@@ -53,8 +53,8 @@ stages:
       md5: 039e5b7e2aff9c041632a709e98874a0
       size: 134
     - path: src/frontend/
-      md5: 27ee43ef1fd0b41230a4f9dea153fab6.dir
-      size: 2153
+      md5: 4d1dd56a52a8241260df553dde3fa96b.dir
+      size: 2114
       nfiles: 3
   build_backend:
     cmd: docker build -t nidhogg-backend -f inference/Dockerfile .
@@ -94,5 +94,5 @@ stages:
       size: 3093
       nfiles: 4
     - path: src/inference.py
-      md5: 186fd71556841d22366d88027af980a8
-      size: 846
+      md5: f2e99199d7d272f43360a30c18b6d6ef
+      size: 1167
