@@ -47,7 +47,7 @@ Build and run the HTTP server container:
 - `docker run -it -p 8080:8080 nidhogg-http-server`
 
 ## How to run locally
-Make sure you have installed [minikube](https://minikube.sigs.k8s.io/docs/start/) and [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) and [docker](https://www.docker.com/).
+Make sure you have installed [minikube](https://minikube.sigs.k8s.io/docs/start/), [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/), [Terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli) and [docker](https://www.docker.com/).
 
 ```
 minikube start
