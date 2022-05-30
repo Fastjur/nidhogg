@@ -23,24 +23,28 @@ stages:
       size: 112774922
       nfiles: 6
   train:
-    cmd: python3 src/train_model.py data/ outputs/models/
+    cmd: python3 src/train_model.py data/ outputs/nltk_corpora/ outputs/models/
     deps:
     - path: data/
       md5: 3d9e62a9c241fcfcf634384a95dd4cf4.dir
       size: 10408878
       nfiles: 4
     - path: src/common/
-      md5: a102c72ce750281eac46801513fea72a.dir
-      size: 3115
+      md5: de91ea9e720f5ec8aa11319f661fa488.dir
+      size: 3857
       nfiles: 4
     - path: src/train_model.py
-      md5: 592bef888ed2e3af834c5ad99ed6529a
-      size: 3973
+      md5: 2772c3ca8d8823b5436b2f95abd7445f
+      size: 4231
     outs:
     - path: outputs/models/
-      md5: 1e2185045a4850b36c559e355c7f8df8.dir
+      md5: edb923ea60349fa5a73a08cd0e8b8fa0.dir
       size: 27566987
       nfiles: 3
+    - path: outputs/nltk_corpora/
+      md5: 0f5ffa2f0ac78640a89e95ee348f9e98.dir
+      size: 90497
+      nfiles: 26
   build_frontend:
     cmd: docker build -t nidhogg-frontend -f docker/frontend.Dockerfile .
     deps:
@@ -76,16 +80,20 @@ stages:
     cmd: docker build -t nidhogg-inference -f docker/inference.Dockerfile .
     deps:
     - path: docker/inference.Dockerfile
-      md5: 0b1848d5ff4cdbecffd7c16fd350492b
-      size: 653
+      md5: 5e29ac892573c8a6aedb517d93073fa8
+      size: 674
     - path: outputs/models/
-      md5: 1e2185045a4850b36c559e355c7f8df8.dir
+      md5: edb923ea60349fa5a73a08cd0e8b8fa0.dir
       size: 27566987
       nfiles: 3
+    - path: outputs/nltk_corpora/
+      md5: 0f5ffa2f0ac78640a89e95ee348f9e98.dir
+      size: 90497
+      nfiles: 26
     - path: src/common/
-      md5: a102c72ce750281eac46801513fea72a.dir
-      size: 3115
+      md5: de91ea9e720f5ec8aa11319f661fa488.dir
+      size: 3857
       nfiles: 4
     - path: src/inference_api.py
-      md5: fe6760f14cc0c4ba3bac5da91cf161a7
-      size: 2421
+      md5: 6dbc68675f99794001f2b22fbfc94a56
+      size: 2582

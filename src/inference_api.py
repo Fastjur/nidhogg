@@ -5,11 +5,11 @@ from urllib.parse import parse_qs, urlparse
 import numpy as np
 import sys
 
-from common.preprocessing import preprocess_sentence
+from common.preprocessing import get_stopwords, preprocess_sentence
 from common.predicting import predict
 
 # TODO use dependency injection instead of global variables
-global model_folder
+global nltk_corpora_folder, model_folder
 
 class S(BaseHTTPRequestHandler):
     def __init__(self, *args):
@@ -21,7 +21,9 @@ class S(BaseHTTPRequestHandler):
         self.end_headers()
 
     def load_models(self):
+        # TODO models are still loaded on every request
         if not hasattr(self, "vectorizer"):
+            self.stopwords = get_stopwords(nltk_corpora_folder)
             self.vectorizer = pickle.load(open(f"{model_folder}/vectorizer.pkl", "rb"))
             self.model = pickle.load(open(f"{model_folder}/tfidf_model.pkl", "rb"))
             self.tags = np.loadtxt(f"{model_folder}/tags.txt", dtype=str, delimiter="\n")
@@ -37,7 +39,7 @@ class S(BaseHTTPRequestHandler):
 
         self.load_models()
         sentence = " ".join(params['sentence'])
-        processed_sentence = preprocess_sentence(sentence, self.vectorizer)
+        processed_sentence = preprocess_sentence(sentence, self.vectorizer, self.stopwords)
         labels = predict(processed_sentence, self.model, self.tags)
 
         response = {
@@ -62,9 +64,9 @@ class S(BaseHTTPRequestHandler):
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print("Usage: python src/inference_api.py [model_folder]")
+        print("Usage: python src/inference_api.py [nltk_corpora_folder] [model_folder]")
         exit(1)
-    model_folder = sys.argv[1]
+    [_, nltk_corpora_folder, model_folder] = sys.argv
 
     server_address = ('', 8080)
     httpd = HTTPServer(server_address, S)

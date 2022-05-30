@@ -15,6 +15,7 @@ RUN pip3 install -r requirements.txt
 COPY src/inference_api.py .
 RUN mkdir common
 COPY src/common/ ./common/
+COPY outputs/nltk_corpora/ .
 COPY outputs/models/ .
 
 # Expose port 8080 where the HTTP server serves
@@ -22,4 +23,4 @@ EXPOSE 8080
 
 # Start Python HTTP server application
 ENTRYPOINT ["python3"]
-CMD ["inference_api.py", "./"]
+CMD ["inference_api.py", "./", "./"]

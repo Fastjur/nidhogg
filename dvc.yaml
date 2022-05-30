@@ -1,11 +1,12 @@
 stages:
   train:
-    cmd: python3 src/train_model.py data/ outputs/models/
+    cmd: python3 src/train_model.py data/ outputs/nltk_corpora/ outputs/models/
     deps:
     - src/train_model.py
     - src/common/
     - data/
     outs:
+    - outputs/nltk_corpora/
     - outputs/models/
   build_inference:
     cmd: docker build -t nidhogg-inference -f docker/inference.Dockerfile .
@@ -13,6 +14,7 @@ stages:
     - docker/inference.Dockerfile
     - src/inference_api.py
     - src/common/
+    - outputs/nltk_corpora/
     - outputs/models/
   build_frontend:
     cmd: docker build -t nidhogg-frontend -f docker/frontend.Dockerfile .

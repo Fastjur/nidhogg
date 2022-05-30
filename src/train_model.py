@@ -9,7 +9,7 @@ from sklearn.multiclass import OneVsRestClassifier
 from sklearn.linear_model import LogisticRegression
 import sys
 
-from common.preprocessing import preprocess_sentences
+from common.preprocessing import get_stopwords, preprocess_sentences
 
 def train_tfidf_vectorizer(X_train):
     """
@@ -47,7 +47,7 @@ def count_tags_and_words(X_train, y_train):
                 tags_counts[tag] = 1
     return (tags_counts, words_counts)
 
-def preprocess_data(raw_data_folder):
+def preprocess_data(raw_data_folder, nltk_corpora_folder):
     train = read_data(raw_data_folder + '/train.tsv')
     validation = read_data(raw_data_folder + '/validation.tsv')
     test = pd.read_csv(raw_data_folder + '/test.tsv', sep='\t')
@@ -61,9 +61,10 @@ def preprocess_data(raw_data_folder):
     vectorizer = train_tfidf_vectorizer(X_train)
     vocab = vectorizer.vocabulary_
 
-    X_train = preprocess_sentences(X_train, vectorizer)
-    X_val = preprocess_sentences(X_val, vectorizer)
-    X_test = preprocess_sentences(X_test, vectorizer)
+    stopwords = get_stopwords(nltk_corpora_folder)
+    X_train = preprocess_sentences(X_train, vectorizer, stopwords)
+    X_val = preprocess_sentences(X_val, vectorizer, stopwords)
+    X_test = preprocess_sentences(X_test, vectorizer, stopwords)
 
     mlb = MultiLabelBinarizer(classes=sorted(tags_counts.keys()))
     y_train = mlb.fit_transform(y_train)
@@ -88,16 +89,17 @@ def train_classifier(X_train, y_train, penalty='l1', C=1):
     return clf  
 
 if __name__ == "__main__":
-    if len(sys.argv) != 3:
-        print("Usage: python train_model.py [data_folder] [model_folder]")
+    if len(sys.argv) != 4:
+        print("Usage: python train_model.py [data_folder] [nltk_corpora_folder] [model_folder]")
         exit()
-    data_folder = sys.argv[1]
-    model_folder = sys.argv[2]
+    [_, data_folder, nltk_corpora_folder, model_folder] = sys.argv
     if not os.path.exists(model_folder):
         os.makedirs(model_folder)
+    if not os.path.exists(nltk_corpora_folder):
+        os.makedirs(nltk_corpora_folder)
 
     print("Preprocessing data and training vectorizer... ", end="", flush=True)
-    X_train, y_train, X_val, y_val, X_test, vectorizer, tags = preprocess_data(data_folder)
+    X_train, y_train, X_val, y_val, X_test, vectorizer, tags = preprocess_data(data_folder, nltk_corpora_folder)
     print("Done.")
 
     # Train the model
