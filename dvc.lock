@@ -47,18 +47,15 @@ stages:
     cmd: docker build -t nidhogg-frontend -f docker/frontend.Dockerfile .
     deps:
     - path: docker/frontend.Dockerfile
-      md5: e8d3a7484def80451f37625220be3911
-      size: 626
+      md5: 769a2b25d3c755fb5beea925a366953a
+      size: 611
     - path: requirements.txt
       md5: 039e5b7e2aff9c041632a709e98874a0
       size: 134
-    - path: src/frontend.py
-      md5: a20ed64c16fbe2aa26db4653641391a2
-      size: 487
-    - path: src/templates/
-      md5: 8719bf967a8e31ff50160fbf73654bdd.dir
-      size: 874
-      nfiles: 1
+    - path: src/frontend/
+      md5: 27ee43ef1fd0b41230a4f9dea153fab6.dir
+      size: 2153
+      nfiles: 3
   build_backend:
     cmd: docker build -t nidhogg-backend -f inference/Dockerfile .
     deps:
@@ -81,8 +78,8 @@ stages:
     cmd: docker build -t nidhogg-inference -f docker/inference.Dockerfile .
     deps:
     - path: docker/inference.Dockerfile
-      md5: 9feb5a47760c178f7a03ff465c8b1b36
-      size: 744
+      md5: 3ffa414e3c7076ae526427709e37619a
+      size: 773
     - path: outputs/models/tfidf_model.pkl
       md5: d73b45c8abe684bc1a3136490031e8da
       size: 21526653
@@ -90,12 +87,12 @@ stages:
       md5: acbb1961b64a8847879253b6885a8b10
       size: 6039578
     - path: requirements.txt
-      md5: 1048851eb1e28004588857b1e1390a5b
-      size: 126
+      md5: 039e5b7e2aff9c041632a709e98874a0
+      size: 134
     - path: src/common/
       md5: 7a6d386c4238d1baf9fddfa805f5bd2c.dir
       size: 3093
       nfiles: 4
-    - path: src/inference_api.py
-      md5: d2f00c2b6e7a09e06a7f8b55eccacf46
-      size: 3200
+    - path: src/inference.py
+      md5: 186fd71556841d22366d88027af980a8
+      size: 846

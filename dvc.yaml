@@ -21,7 +21,7 @@ stages:
     cmd: docker build -t nidhogg-inference -f docker/inference.Dockerfile .
     deps:
     - docker/inference.Dockerfile
-    - src/inference_api.py
+    - src/inference.py
     - src/common/
     - outputs/models/vectorizer.pkl
     - outputs/models/tfidf_model.pkl
@@ -30,6 +30,5 @@ stages:
     cmd: docker build -t nidhogg-frontend -f docker/frontend.Dockerfile .
     deps:
     - docker/frontend.Dockerfile
-    - src/frontend.py
-    - src/templates/
+    - src/frontend/
     - requirements.txt

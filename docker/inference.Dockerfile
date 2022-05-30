@@ -12,16 +12,19 @@ COPY requirements.txt .
 RUN pip3 install -r requirements.txt
 
 # Copy application files and trained models
-COPY src/inference_api.py .
+COPY src/inference.py .
 RUN mkdir common
 COPY src/common/ ./common/
 COPY outputs/processed_data/tags.txt .
 COPY outputs/models/vectorizer.pkl .
 COPY outputs/models/tfidf_model.pkl .
 
+
+ENV FLASK_APP=inference.py
+
 # Expose port 8080 where the HTTP server serves
 EXPOSE 8080
 
 # Start Python HTTP server application
-ENTRYPOINT ["python3"]
-CMD ["inference_api.py", "./", "./tags.txt"]
+ENTRYPOINT ["flask"]
+CMD ["run", "--host", "0.0.0.0", "--port", "8080"]
