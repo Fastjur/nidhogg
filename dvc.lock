@@ -50,8 +50,8 @@ stages:
       md5: e8d3a7484def80451f37625220be3911
       size: 626
     - path: requirements.txt
-      md5: 1048851eb1e28004588857b1e1390a5b
-      size: 126
+      md5: 039e5b7e2aff9c041632a709e98874a0
+      size: 134
     - path: src/frontend.py
       md5: a20ed64c16fbe2aa26db4653641391a2
       size: 487

@@ -6,4 +6,4 @@ scipy==1.8.0
 scikit-learn==0.24.1
 nltk==3.7
 flask==2.1.2
-requests
+requests==2.27.1
