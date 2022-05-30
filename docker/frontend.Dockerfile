@@ -8,16 +8,19 @@ RUN apt install python3-pip python3-venv -y
 RUN python3 -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 RUN python3 -m pip install --upgrade pip
-COPY frontend/requirements.txt .
+COPY requirements.txt .
 RUN pip install -r requirements.txt
 
 # Copy application files
-COPY frontend/http_server.py .
-COPY frontend/index.html .
+COPY src/frontend.py .
+RUN mkdir frontend
+COPY src/templates/ ./templates/
+
+ENV FLASK_APP=frontend.py
 
 # Expose port 8080 where the HTTP server serves
-EXPOSE 8080
+EXPOSE 5000
 
 # Start Python HTTP server application
-ENTRYPOINT ["python3"]
-CMD ["http_server.py"]
+ENTRYPOINT ["flask"]
+CMD ["run", "--host", "0.0.0.0"]

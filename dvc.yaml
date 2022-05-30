@@ -1,30 +1,35 @@
 stages:
   preprocess:
-    cmd: python3 src/run.py --preprocess
+    cmd: python3 src/preprocess_data.py
     deps:
-    - data/
     - src/preprocess_data.py
+    - src/common/
+    - data/
     outs:
     - outputs/processed_data/
     - outputs/models/vectorizer.pkl
   train:
-    cmd: python3 src/run.py --train
+    cmd: python3 src/train_model.py
     deps:
-    - src/preprocess_data.py
+    - src/common/
     - src/train_model.py
     - outputs/processed_data/
     - outputs/models/vectorizer.pkl
     outs:
     - outputs/models/tfidf_model.pkl
-  build_backend:
-    cmd: docker build -t nidhogg-backend -f inference/Dockerfile .
+  build_inference:
+    cmd: docker build -t nidhogg-inference -f docker/inference.Dockerfile .
     deps:
-    - inference/Dockerfile
-    - src/preprocess_data.py
+    - docker/inference.Dockerfile
     - src/inference_api.py
+    - src/common/
     - outputs/models/vectorizer.pkl
     - outputs/models/tfidf_model.pkl
+    - requirements.txt
   build_frontend:
-    cmd: docker build -t nidhogg-frontend -f frontend/Dockerfile .
+    cmd: docker build -t nidhogg-frontend -f docker/frontend.Dockerfile .
     deps:
-    - frontend/
+    - docker/frontend.Dockerfile
+    - src/frontend.py
+    - src/templates/
+    - requirements.txt

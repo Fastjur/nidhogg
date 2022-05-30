@@ -1,0 +1,2 @@
+# Raw data can be excluded from Docker build context
+data/

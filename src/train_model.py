@@ -21,6 +21,7 @@ def train_classifier(X_train, y_train, penalty='l1', C=1):
     
     return clf  
 
+# TODO convert to __main__ method
 def start_training(processed_data_folder, model_folder):
     X_train_tfidf = sparse.load_npz(f"{processed_data_folder}/X_train.npz")
     with open(f"./{processed_data_folder}/y_train.npy", "rb") as f:
@@ -29,3 +30,9 @@ def start_training(processed_data_folder, model_folder):
     clf = train_classifier(X_train_tfidf, y_train, penalty='l2', C=10)
     with open(f"{model_folder}/tfidf_model.pkl", "wb") as f:
         pickle.dump(clf, f)
+
+# TODO merge code below with start_training method
+if __name__ == "__main__":
+    processed_data_folder = "./outputs/processed_data"
+    model_folder = "./outputs/models"
+    start_training(processed_data_folder, model_folder)

@@ -3,43 +3,13 @@ import numpy as np
 import os
 import pandas as pd
 import pickle
-import re
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.preprocessing import MultiLabelBinarizer
 from scipy import sparse
 
-import nltk
-nltk.download('stopwords')
-from nltk.corpus import stopwords
+from common.preprocessing import preprocess_sentences
 
-# TODO downloading the stopwords could be handled better
-# TODO move vectorizer hyperparameter elsewhere
-
-def process_question(text):
-    """
-        text: a string
-        
-        return: modified initial string
-    """
-    REPLACE_BY_SPACE_RE = re.compile('[/(){}\[\]\|@,;]')
-    BAD_SYMBOLS_RE = re.compile('[^0-9a-z #+_]')
-    STOPWORDS = set(stopwords.words('english'))
-    text = text.lower() # lowercase text
-    text = re.sub(REPLACE_BY_SPACE_RE, " ", text) # replace REPLACE_BY_SPACE_RE symbols by space in text
-    text = re.sub(BAD_SYMBOLS_RE, "", text) # delete symbols which are in BAD_SYMBOLS_RE from text
-    text = " ".join([word for word in text.split() if not word in STOPWORDS]) # delete stopwords from text
-    return text
-
-def preprocess_sentences(X_vals, vectorizer):
-    X_vals = [process_question(x) for x in X_vals]
-    X_vals = vectorizer.transform(X_vals)
-    return X_vals
-
-def preprocess_sentence(sentence, vectorizer):
-    sentence = process_question(sentence)
-    sentence = vectorizer.transform([sentence])
-    return sentence
-
+# TODO move vectorizer hyperparameters elsewhere
 def train_tfidf_vectorizer(X_train):
     """
         X_train, X_val, X_test — samples        
@@ -116,3 +86,10 @@ def preprocess_data(raw_data_folder, processed_data_folder, model_folder):
     
     with open(f'{processed_data_folder}/y_val.npy', 'wb') as f:
         np.save(f, y_val)
+
+# TODO merge code below with preprocess_data method
+if __name__ == "__main__":
+    raw_data_folder = "./data"
+    processed_data_folder = "./outputs/processed_data"
+    model_folder = "./outputs/models"
+    preprocess_data(raw_data_folder, processed_data_folder, model_folder)
