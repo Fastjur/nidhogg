@@ -94,5 +94,5 @@ stages:
       size: 3093
       nfiles: 4
     - path: src/inference.py
-      md5: f2e99199d7d272f43360a30c18b6d6ef
-      size: 1167
+      md5: f030a80ef68f603013413cef6890f5c2
+      size: 1169

@@ -1,11 +1,6 @@
 resource "kubernetes_service" "inference-service" {
   metadata {
     name      = "inference-service"
-    annotations = {
-      "prometheus.io/scrape" = "true"
-      "prometheus.io/port"   = "8080"
-      "prometheus.io/path"   = "/metrics"
-    }
   }
   spec {
     selector = {
@@ -46,6 +41,22 @@ resource "kubernetes_service" "grafana" {
     port {
       port        = 3000
       target_port = 3000
+    }
+    type = "LoadBalancer"
+  }
+}
+
+resource "kubernetes_service" "prom" {
+  metadata {
+    name      = "prom-service"
+  }
+  spec {
+    selector = {
+      "component" = "server"
+    }
+    port {
+      port        = 9090
+      target_port = 9090
     }
     type = "LoadBalancer"
   }

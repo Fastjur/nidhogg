@@ -38,7 +38,7 @@ def predict_question_tags():
 def metrics():
     metrics = ""
     for tag in tag_predictions:
-        metrics += f"predicted_total{{tag={tag}}} {tag_predictions[tag]}\n"
+        metrics += f'predicted_total{{tag="{tag}"}} {tag_predictions[tag]}\n'
 
     return metrics
 
