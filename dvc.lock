@@ -23,26 +23,24 @@ stages:
       size: 112774922
       nfiles: 6
   train:
-    cmd: python3 src/train_model.py
+    cmd: python3 src/train_model.py data/ outputs/models/
     deps:
-    - path: outputs/models/vectorizer.pkl
-      md5: 0a8b5f842d4c8de8c55507479f1fddb1
-      size: 6039557
-    - path: outputs/processed_data/
-      md5: 7730ae7add1883a1d89e24abfc316802.dir
-      size: 112774922
-      nfiles: 6
+    - path: data/
+      md5: 3d9e62a9c241fcfcf634384a95dd4cf4.dir
+      size: 10408878
+      nfiles: 4
     - path: src/common/
-      md5: 5539f7e5a5514497fe76383475197425.dir
+      md5: a102c72ce750281eac46801513fea72a.dir
       size: 3115
       nfiles: 4
     - path: src/train_model.py
-      md5: cc0c0b52fca0cf4bc6330f5da833b6f8
-      size: 1265
+      md5: 592bef888ed2e3af834c5ad99ed6529a
+      size: 3973
     outs:
-    - path: outputs/models/tfidf_model.pkl
-      md5: 40c023aa76368aa506f19c1ed2a9ef45
-      size: 21526649
+    - path: outputs/models/
+      md5: 1e2185045a4850b36c559e355c7f8df8.dir
+      size: 27566987
+      nfiles: 3
   build_frontend:
     cmd: docker build -t nidhogg-frontend -f docker/frontend.Dockerfile .
     deps:
@@ -78,18 +76,16 @@ stages:
     cmd: docker build -t nidhogg-inference -f docker/inference.Dockerfile .
     deps:
     - path: docker/inference.Dockerfile
-      md5: 9feb5a47760c178f7a03ff465c8b1b36
-      size: 744
-    - path: outputs/models/tfidf_model.pkl
-      md5: 40c023aa76368aa506f19c1ed2a9ef45
-      size: 21526649
-    - path: outputs/models/vectorizer.pkl
-      md5: 0a8b5f842d4c8de8c55507479f1fddb1
-      size: 6039557
+      md5: 0b1848d5ff4cdbecffd7c16fd350492b
+      size: 653
+    - path: outputs/models/
+      md5: 1e2185045a4850b36c559e355c7f8df8.dir
+      size: 27566987
+      nfiles: 3
     - path: src/common/
-      md5: 5539f7e5a5514497fe76383475197425.dir
+      md5: a102c72ce750281eac46801513fea72a.dir
       size: 3115
       nfiles: 4
     - path: src/inference_api.py
-      md5: e7e7e45835f26ffae02ea77ed7248847
-      size: 2810
+      md5: fe6760f14cc0c4ba3bac5da91cf161a7
+      size: 2421
