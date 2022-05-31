@@ -1,19 +1,12 @@
 from flask import Flask, render_template, request
 import pickle
 import numpy as np
+import sys
 
 from common.preprocessing import preprocess_sentence
 from common.predicting import predict
 
-model_folder = "."
-tags_location = "tags.txt"
-
-vectorizer = pickle.load(open(f"{model_folder}/vectorizer.pkl", "rb"))
-model = pickle.load(open(f"{model_folder}/tfidf_model.pkl", "rb"))
-tags = np.loadtxt(tags_location, dtype=str, delimiter="\n")
-
 app = Flask(__name__)
-
 tag_predictions = {}
 
 
@@ -42,3 +35,13 @@ def metrics():
 
     return metrics
 
+
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print("Usage: python inference_api.py [model_folder]")
+        exit(1)
+    model_folder = sys.argv[1]
+
+    vectorizer = pickle.load(open(f"{model_folder}/vectorizer.pkl", "rb"))
+    model = pickle.load(open(f"{model_folder}/tfidf_model.pkl", "rb"))
+    tags = np.loadtxt(f"{model_folder}/tags.txt", dtype=str, delimiter="\n")
