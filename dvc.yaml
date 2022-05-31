@@ -26,6 +26,12 @@ stages:
     - outputs/models/vectorizer.pkl
     - outputs/models/tfidf_model.pkl
     - requirements.txt
+  build_alertmetrics:
+    cmd: docker build -t alertmetrics -f docker/alertmetrics.Dockerfile .
+    deps:
+    - docker/alertmetrics.Dockerfile
+    - src/alertmetrics/
+    - requirements.txt  
   build_frontend:
     cmd: docker build -t nidhogg-frontend -f docker/frontend.Dockerfile .
     deps:

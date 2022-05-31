@@ -50,8 +50,8 @@ stages:
       md5: 769a2b25d3c755fb5beea925a366953a
       size: 611
     - path: requirements.txt
-      md5: 039e5b7e2aff9c041632a709e98874a0
-      size: 134
+      md5: 16773003e97ec5357dcb2149c85c7cd4
+      size: 176
     - path: src/frontend/
       md5: 4d1dd56a52a8241260df553dde3fa96b.dir
       size: 2114
@@ -87,12 +87,25 @@ stages:
       md5: acbb1961b64a8847879253b6885a8b10
       size: 6039578
     - path: requirements.txt
-      md5: 039e5b7e2aff9c041632a709e98874a0
-      size: 134
+      md5: 16773003e97ec5357dcb2149c85c7cd4
+      size: 176
     - path: src/common/
       md5: 7a6d386c4238d1baf9fddfa805f5bd2c.dir
       size: 3093
       nfiles: 4
     - path: src/inference.py
-      md5: f030a80ef68f603013413cef6890f5c2
-      size: 1169
+      md5: e849d51d5159902d2524188903c65a70
+      size: 1406
+  build_alertmetrics:
+    cmd: docker build -t alertmetrics -f docker/alertmetrics.Dockerfile .
+    deps:
+    - path: docker/alertmetrics.Dockerfile
+      md5: b43a52210da2e2cbd1870287be487da7
+      size: 619
+    - path: requirements.txt
+      md5: 16773003e97ec5357dcb2149c85c7cd4
+      size: 176
+    - path: src/alertmetrics/
+      md5: 30671d1e7a2b90698ca6aa6bed9389f4.dir
+      size: 3046
+      nfiles: 4
