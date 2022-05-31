@@ -12,7 +12,8 @@ stages:
     cmd: docker build -t nidhogg-inference -f docker/inference.Dockerfile .
     deps:
     - docker/inference.Dockerfile
-    - src/inference_api.py
+    - requirements.txt
+    - src/inference.py
     - src/common/
     - outputs/nltk_corpora/
     - outputs/models/
@@ -20,5 +21,6 @@ stages:
     cmd: docker build -t nidhogg-frontend -f docker/frontend.Dockerfile .
     deps:
     - docker/frontend.Dockerfile
-    - src/frontend.py
+    - requirements.txt
     - src/frontend/
+    - requirements.txt

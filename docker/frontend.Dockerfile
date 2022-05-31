@@ -12,13 +12,12 @@ COPY requirements.txt .
 RUN pip install -r requirements.txt
 
 # Copy application files
-COPY src/frontend.py .
-RUN mkdir frontend
-COPY src/frontend/ ./frontend/
+COPY src/frontend/app.py .
+COPY src/frontend/templates/ ./templates/
 
 # Expose port 8080 where the HTTP server serves
-EXPOSE 8080
+EXPOSE 5000
 
 # Start Python HTTP server application
-ENTRYPOINT ["python3"]
-CMD ["frontend.py"]
+ENTRYPOINT ["flask"]
+CMD ["run", "--host", "0.0.0.0", "--port", "5000"]

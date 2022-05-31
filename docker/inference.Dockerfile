@@ -12,15 +12,15 @@ COPY requirements.txt .
 RUN pip3 install -r requirements.txt
 
 # Copy application files and trained models
-COPY src/inference_api.py .
+COPY src/inference.py .
 RUN mkdir common
 COPY src/common/ ./common/
 COPY outputs/nltk_corpora/ .
 COPY outputs/models/ .
 
-# Expose port 8080 where the HTTP server serves
-EXPOSE 8080
+# Expose port 5000 where the HTTP server serves
+EXPOSE 5000
 
 # Start Python HTTP server application
 ENTRYPOINT ["python3"]
-CMD ["inference_api.py", "./", "./"]
+CMD ["inference.py", "./"]

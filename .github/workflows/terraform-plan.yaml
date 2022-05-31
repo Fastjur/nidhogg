@@ -39,7 +39,7 @@ jobs:
           GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
 
       - uses: actions/github-script@v6
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' && ${{ !env.ACT }}
         env:
           PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
         with:

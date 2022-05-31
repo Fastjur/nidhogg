@@ -8,16 +8,16 @@ stages:
       size: 10408878
       nfiles: 4
     - path: src/common/
-      md5: 5539f7e5a5514497fe76383475197425.dir
-      size: 3115
+      md5: 7a6d386c4238d1baf9fddfa805f5bd2c.dir
+      size: 3093
       nfiles: 4
     - path: src/preprocess_data.py
       md5: b1e680538f0a6e8e3026c983335b2807
       size: 3414
     outs:
     - path: outputs/models/vectorizer.pkl
-      md5: 0a8b5f842d4c8de8c55507479f1fddb1
-      size: 6039557
+      md5: acbb1961b64a8847879253b6885a8b10
+      size: 6039578
     - path: outputs/processed_data/
       md5: 7730ae7add1883a1d89e24abfc316802.dir
       size: 112774922
@@ -49,15 +49,15 @@ stages:
     cmd: docker build -t nidhogg-frontend -f docker/frontend.Dockerfile .
     deps:
     - path: docker/frontend.Dockerfile
-      md5: 95444a2db35eebda32ff78852a3e7d37
-      size: 586
-    - path: src/frontend.py
-      md5: 971b79df95933a8eb9bfbf73238dfa44
-      size: 2443
+      md5: 769a2b25d3c755fb5beea925a366953a
+      size: 611
+    - path: requirements.txt
+      md5: 039e5b7e2aff9c041632a709e98874a0
+      size: 134
     - path: src/frontend/
-      md5: 49eccedec2f0dc1d9a354761129cae05.dir
-      size: 797
-      nfiles: 1
+      md5: 4d1dd56a52a8241260df553dde3fa96b.dir
+      size: 2114
+      nfiles: 3
   build_backend:
     cmd: docker build -t nidhogg-backend -f inference/Dockerfile .
     deps:
