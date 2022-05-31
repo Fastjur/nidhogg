@@ -1,6 +1,6 @@
 resource "kubernetes_service" "inference-service" {
   metadata {
-    name      = "inference-service"
+    name = "inference-service"
   }
   spec {
     selector = {
@@ -16,7 +16,7 @@ resource "kubernetes_service" "inference-service" {
 
 resource "kubernetes_service" "frontend-service" {
   metadata {
-    name      = "frontend-service"
+    name = "frontend-service"
   }
   spec {
     selector = {
@@ -32,7 +32,7 @@ resource "kubernetes_service" "frontend-service" {
 
 resource "kubernetes_service" "grafana" {
   metadata {
-    name      = "grafana-service"
+    name = "grafana-service"
   }
   spec {
     selector = {
@@ -48,7 +48,7 @@ resource "kubernetes_service" "grafana" {
 
 resource "kubernetes_service" "prom" {
   metadata {
-    name      = "prom-service"
+    name = "prom-service"
   }
   spec {
     selector = {
@@ -64,7 +64,7 @@ resource "kubernetes_service" "prom" {
 
 resource "kubernetes_pod" "frontend" {
   metadata {
-    name      = "inference-frontend"
+    name = "inference-frontend"
     labels = {
       App = "inference-frontend"
     }
@@ -72,8 +72,8 @@ resource "kubernetes_pod" "frontend" {
 
   spec {
     container {
-      image = var.use_local_containers ? "nidhogg-frontend:latest" : "ghcr.io/fastjur/nidhogg-frontend:latest"
-      name  = "inference-frontend"
+      image             = var.use_local_containers ? "nidhogg-frontend:latest" : "ghcr.io/fastjur/nidhogg-frontend:latest"
+      name              = "inference-frontend"
       image_pull_policy = var.use_local_containers ? "Never" : "IfNotPresent"
 
       port {
@@ -87,11 +87,11 @@ resource "kubernetes_pod" "frontend" {
 
 resource "kubernetes_pod" "inference" {
   metadata {
-    name      = "inference-backend"
+    name = "inference-backend"
     labels = {
       app = "inference-backend"
     }
-    
+
     annotations = {
       "prometheus.io/scrape" = "true"
       "prometheus.io/port"   = "8080"
@@ -101,8 +101,8 @@ resource "kubernetes_pod" "inference" {
 
   spec {
     container {
-      image = var.use_local_containers ? "nidhogg-inference:latest" : "ghcr.io/fastjur/nidhogg-inference:latest"
-      name  = "inference-backend"
+      image             = var.use_local_containers ? "nidhogg-inference:latest" : "ghcr.io/fastjur/nidhogg-inference:latest"
+      name              = "inference-backend"
       image_pull_policy = var.use_local_containers ? "Never" : "IfNotPresent"
 
       port {
