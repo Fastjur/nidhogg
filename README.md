@@ -31,6 +31,14 @@ minikube tunnel
 To lint the python code, you should run the `linter.sh` script.
 This requires you to have installed the `requirements.txt` file.
 
+## Testing out github actions locally using act
+You can test out the github actions locally using the `act` tool.
+1. Install the `act` tool: https://github.com/nektos/act
+2. Create a Personal Access Token: https://github.com/settings/tokens/new and make sure it has the `repo`, `read:user`, `read:email` and `write:discussions` scopes.
+3. Save this token in a `act.secrets` file as: `GITHUB_TOKEN=<your token>`.
+4. Then you can test out actions using act, see their page for more instructions.
+   You have to include the secrets file using `act --secret-file act.secrets <any other options or commands>`
+
 ## Additions
 
 - Template code from: https://github.com/mengdong/python-ml-structure

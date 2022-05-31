@@ -38,6 +38,7 @@ jobs:
           path: ./mllint-sanitized.md
 
       - name: "Update PR with mllint output"
+        if: ${{ !env.ACT }}
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}

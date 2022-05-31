@@ -23,6 +23,7 @@ jobs:
 
       # Initializes the CodeQL tools for scanning.
       - name: Initialize CodeQL
+        if: ${{ !env.ACT }}
         uses: github/codeql-action/init@v2
         # Override language selection by uncommenting this and choosing your languages
         # with:
@@ -31,6 +32,7 @@ jobs:
       # Autobuild attempts to build any compiled languages (C/C++, C#, or Java).
       # If this step fails, then you should remove it and run the build manually (see below).
       - name: Autobuild
+        if: ${{ !env.ACT }}
         uses: github/codeql-action/autobuild@v2
 
       # ℹ️ Command-line programs to run using the OS shell.
@@ -45,4 +47,5 @@ jobs:
       #     make release
 
       - name: Perform CodeQL Analysis
+        if: ${{ !env.ACT }}
         uses: github/codeql-action/analyze@v2
