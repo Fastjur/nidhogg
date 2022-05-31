@@ -7,9 +7,12 @@ minikube start
 ```
 
 ### Building local image
-Note that if you want to run your local images, you need to execute the following commands.
+Note that if you want to run your local images, you need to have installed [dvc](https://dvc.org/) and execute the following commands.
 ```
 eval $(minikube docker-env)
+python3 -m venv venv # Only if you have not already created a venv directory!
+source venv/bin/activate
+pip install -r requirements.txt
 dvc repro
 ```
 
