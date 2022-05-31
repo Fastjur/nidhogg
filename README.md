@@ -33,6 +33,10 @@ Note: this sample project was originally created by @partoftheorigin
 All the terraform files should be stored in the `terraform` folder.
 If you want to use the terraform cli tool, you should first `cd terraform` to navigate to the terraform folder.
 
+## Linting the python coce
+To lint the python code, you should run the `linter.sh` script.
+This requires you to have installed the `requirements.txt` file.
+
 ## Additions
 
 - Template code from: https://github.com/mengdong/python-ml-structure
