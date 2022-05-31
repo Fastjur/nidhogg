@@ -26,3 +26,20 @@ terraform apply -var="use_local_containers=true"
 ```
 minikube tunnel
 ```
+
+## Linting the python code
+To lint the python code, you should run the `linter.sh` script.
+This requires you to have installed the `requirements.txt` file.
+
+## Additions
+
+- Template code from: https://github.com/mengdong/python-ml-structure
+
+Get started:
+- `python3 ./src/run.py --preprocess`
+- `python3 ./src/run.py --train`
+- `python3 ./src/run.py --serve`
+
+Build and run the HTTP server container:
+- `docker build -t nidhogg-http-server http_server`
+- `docker run -it -p 8080:8080 nidhogg-http-server`
