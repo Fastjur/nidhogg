@@ -80,7 +80,7 @@ resource "kubernetes_service" "prom" {
 
 resource "kubernetes_pod" "frontend" {
   metadata {
-    name      = "inference-frontend"
+    name = "inference-frontend"
     labels = {
       App = "inference-frontend"
     }
@@ -103,7 +103,7 @@ resource "kubernetes_pod" "frontend" {
 
 resource "kubernetes_pod" "inference" {
   metadata {
-    name      = "inference-backend"
+    name = "inference-backend"
     labels = {
       app = "inference-backend"
     }
@@ -130,7 +130,7 @@ resource "kubernetes_pod" "inference" {
 
 resource "kubernetes_pod" "alertmetrics" {
   metadata {
-    name      = "alertmetrics"
+    name = "alertmetrics"
     labels = {
       app = "alertmetrics"
     }
