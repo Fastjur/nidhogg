@@ -7,7 +7,7 @@
     <title>Test Document</title>
 </head>
 <body>
-    <form action="predict" method="post">
+    <form action="/predict" method="post" enctype="application/x-www-form-urlencoded">
         <label for="input">StackOverflow question:</label>
         <input type="text" name="input" id="input" placeholder="What is the answer to the universe?" required><br>
         <!-- <label for="lastname">Last Name (test)</label>
@@ -16,5 +16,6 @@
         <input type="text" name="url" id="application-url"><br> -->
         <input type="submit" value="Submit">
     </form>
+    <p>Result: {{ answer }}</p>
 </body>
 </html>

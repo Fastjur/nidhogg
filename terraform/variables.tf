@@ -6,6 +6,12 @@ variable "cluster_name" {
   description = "The name for the GKE cluster"
   default     = "nidhogg-cluster"
 }
+
+variable "use_local_containers" {
+  description = "Use local containers instead of pulling from the registry"
+  default     = false
+}
+
 variable "env_name" {
   description = "The environment for the GKE cluster"
   default     = "prod"
