@@ -30,6 +30,22 @@ resource "kubernetes_service" "frontend-service" {
   }
 }
 
+resource "kubernetes_service" "alertmetrics-service" {
+  metadata {
+    name = "alertmetrics-service"
+  }
+  spec {
+    selector = {
+      app = "alertmetrics"
+    }
+    port {
+      port        = 3001
+      target_port = 3001
+    }
+    type = "LoadBalancer"
+  }
+}
+
 resource "kubernetes_service" "grafana" {
   metadata {
     name = "grafana-service"
@@ -107,6 +123,33 @@ resource "kubernetes_pod" "inference" {
 
       port {
         container_port = 8080
+      }
+    }
+  }
+}
+
+resource "kubernetes_pod" "alertmetrics" {
+  metadata {
+    name      = "alertmetrics"
+    labels = {
+      app = "alertmetrics"
+    }
+
+    annotations = {
+      "prometheus.io/scrape" = "true"
+      "prometheus.io/port"   = "3001"
+      "prometheus.io/path"   = "/metrics"
+    }
+  }
+
+  spec {
+    container {
+      image             = var.use_local_containers ? "alertmetrics:latest" : "ghcr.io/fastjur/alertmetrics:latest"
+      name              = "alertmetrics"
+      image_pull_policy = var.use_local_containers ? "Never" : "IfNotPresent"
+
+      port {
+        container_port = 3001
       }
     }
   }
