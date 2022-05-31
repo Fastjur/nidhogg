@@ -1,37 +1,43 @@
-# Multilabel classification on Stack Overflow tags
-Predict tags for posts from StackOverflow with multilabel classification approach.
 
-## Dataset
-- Dataset of post titles from StackOverflow
+## How to run locally
+Make sure you have installed [minikube](https://minikube.sigs.k8s.io/docs/start/), [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/), [Terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli) and [docker](https://www.docker.com/).
 
-## Transforming text to a vector
-- Transformed text data to numeric vectors using bag-of-words and TF-IDF.
+```
+minikube start
+```
 
-## MultiLabel classifier
-[MultiLabelBinarizer](http://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.MultiLabelBinarizer.html) to transform labels in a binary form and the prediction will be a mask of 0s and 1s.
+### Building local image
+Note that if you want to run your local images, you need to execute the following commands.
+```
+eval $(minikube docker-env)
+dvc repro
+```
 
-[Logistic Regression](http://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html) for Multilabel classification
-- Coefficient = 10
-- L2-regularization technique
+```
+minikube dashboard
+```
 
-## Evaluation
-Results evaluated using several classification metrics:
-- [Accuracy](http://scikit-learn.org/stable/modules/generated/sklearn.metrics.accuracy_score.html)
-- [F1-score](http://scikit-learn.org/stable/modules/generated/sklearn.metrics.f1_score.html)
-- [Area under ROC-curve](http://scikit-learn.org/stable/modules/generated/sklearn.metrics.roc_auc_score.html)
-- [Area under precision-recall curve](http://scikit-learn.org/stable/modules/generated/sklearn.metrics.average_precision_score.html#sklearn.metrics.average_precision_score)
+```
+cd terraform
+terraform init
+terraform apply -var="use_local_containers=true"
+```
 
-## Libraries
-- [Numpy](http://www.numpy.org/) — a package for scientific computing.
-- [Pandas](https://pandas.pydata.org/) — a library providing high-performance, easy-to-use data structures and data analysis tools for the Python
-- [scikit-learn](http://scikit-learn.org/stable/index.html) — a tool for data mining and data analysis.
-- [NLTK](http://www.nltk.org/) — a platform to work with natural language.
+```
+minikube tunnel
+```
 
-Note: this sample project was originally created by @partoftheorigin
+## Linting the python code
+To lint the python code, you should run the `linter.sh` script.
+This requires you to have installed the `requirements.txt` file.
 
-## Terraform
-All the terraform files should be stored in the `terraform` folder.
-If you want to use the terraform cli tool, you should first `cd terraform` to navigate to the terraform folder.
+## Testing out github actions locally using act
+You can test out the github actions locally using the `act` tool.
+1. Install the `act` tool: https://github.com/nektos/act
+2. Create a Personal Access Token: https://github.com/settings/tokens/new and make sure it has the `repo`, `read:user`, `read:email` and `write:discussions` scopes.
+3. Save this token in a `act.secrets` file as: `GITHUB_TOKEN=<your token>`.
+4. Then you can test out actions using act, see their page for more instructions.
+   You have to include the secrets file using `act --secret-file act.secrets <any other options or commands>`
 
 ## Additions
 

@@ -1,0 +1,1 @@
+pylint --rcfile=.pylintrc frontend inference src
