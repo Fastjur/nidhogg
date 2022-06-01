@@ -1,4 +1,4 @@
-name: Train model and build containers
+name: Train model, build containers and create a new version tag
 
 on:
   push:
@@ -8,6 +8,9 @@ on:
   workflow_dispatch:
     branches: [main]
 
+env:
+  is_push_to_main: ${{ (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main' }}
+
 jobs:
   dvc-repro:
     name: "Run complete DVC pipeline"
@@ -15,6 +18,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: '0'
       - name: Setup Python 3.8
         uses: actions/setup-python@v3
         with:
@@ -27,29 +32,35 @@ jobs:
       - name: Run DVC pipeline
         run: |
           dvc repro
-      # - name: Log in to the Container registry
-      #   uses: docker/login-action@v2
-      #   with:
-      #     registry: ${{ env.REGISTRY }}
-      #     username: ${{ github.actor }}
-      #     password: ${{ secrets.GITHUB_TOKEN }}
 
-      # - name: Extract metadata (tags, labels) for Docker
-      #   id: meta
-      #   uses: docker/metadata-action@v4
-      #   with:
-      #     images: ${{ matrix.image }}
-      #     tags: |
-      #       # Create a tag with the git commit hash
-      #       type=sha
-      #       # set latest tag for default branch
-      #       type=raw,value=latest,enable={{is_default_branch}}
+      # On pushes to main, we bump the minor version and push a new v* tag
+      - name: Bump version and push tag
+        if: ${{ env.is_push_to_main }}
+        id: bumpVersion
+        uses: anothrNick/github-tag-action@1.36.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WITH_V: true
 
-      # - name: Build and push Docker image
-      #   uses: docker/build-push-action@v3
-      #   with:
-      #     context: .
-      #     file: ${{ matrix.dockerfile }}
-      #     push: true
-      #     tags: ${{ steps.meta.outputs.tags }}
-      #     labels: ${{ steps.meta.outputs.labels }}
+      - name: Tag the created docker images
+        if: ${{ env.is_push_to_main }}
+        run: |
+          docker images
+          docker image tag nidhogg-inference:latest ghcr.io/fastjur/nidhogg/nidhogg-inference:latest
+          docker image tag nidhogg-inference:latest ghcr.io/fastjur/nidhogg/nidhogg-inference:${{ steps.bumpVersion.outputs.tag }}
+          docker image tag nidhogg-frontend:latest ghcr.io/fastjur/nidhogg/nidhogg-frontend:latest
+          docker image tag nidhogg-frontend:latest ghcr.io/fastjur/nidhogg/nidhogg-frontend:${{ steps.bumpVersion.outputs.tag }}
+
+      - name: Log in to the Container registry
+        if: ${{ env.is_push_to_main }}
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push the docker images to the Container registry
+        if: ${{ env.is_push_to_main }}
+        run: |
+          docker image push --all-tags ghcr.io/fastjur/nidhogg/nidhogg-inference
+          docker image push --all-tags ghcr.io/fastjur/nidhogg/nidhogg-frontend
