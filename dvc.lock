@@ -85,11 +85,6 @@ stages:
     - path: outputs/models/vectorizer.pkl
       md5: acbb1961b64a8847879253b6885a8b10
       size: 6039578
-    - path: requirements.txt
-      md5: 16773003e97ec5357dcb2149c85c7cd4
-      size: 176
-      md5: 5e29ac892573c8a6aedb517d93073fa8
-      size: 674
     - path: outputs/models/
       md5: 0990e7ed02d30e4713ee4cc62fc11e96.dir
       size: 27566987
