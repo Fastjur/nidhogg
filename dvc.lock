@@ -51,9 +51,6 @@ stages:
     - path: docker/frontend.Dockerfile
       md5: 769a2b25d3c755fb5beea925a366953a
       size: 611
-    - path: requirements.txt
-      md5: 16773003e97ec5357dcb2149c85c7cd4
-      size: 176
     - path: src/frontend/
       md5: 4d1dd56a52a8241260df553dde3fa96b.dir
       size: 2114
