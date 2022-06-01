@@ -23,26 +23,28 @@ stages:
       size: 112774922
       nfiles: 6
   train:
-    cmd: python3 src/train_model.py
+    cmd: python3 src/train_model.py data/ outputs/nltk_corpora/ outputs/models/
     deps:
-    - path: outputs/models/vectorizer.pkl
-      md5: acbb1961b64a8847879253b6885a8b10
-      size: 6039578
-    - path: outputs/processed_data/
-      md5: 7730ae7add1883a1d89e24abfc316802.dir
-      size: 112774922
-      nfiles: 6
+    - path: data/
+      md5: 3d9e62a9c241fcfcf634384a95dd4cf4.dir
+      size: 10408878
+      nfiles: 4
     - path: src/common/
-      md5: 7a6d386c4238d1baf9fddfa805f5bd2c.dir
-      size: 3093
+      md5: bbf2c948175c8d9cc858212095d5a7f5.dir
+      size: 3680
       nfiles: 4
     - path: src/train_model.py
-      md5: cc0c0b52fca0cf4bc6330f5da833b6f8
-      size: 1265
+      md5: 2772c3ca8d8823b5436b2f95abd7445f
+      size: 4231
     outs:
-    - path: outputs/models/tfidf_model.pkl
-      md5: d73b45c8abe684bc1a3136490031e8da
-      size: 21526653
+    - path: outputs/models/
+      md5: 0990e7ed02d30e4713ee4cc62fc11e96.dir
+      size: 27566987
+      nfiles: 3
+    - path: outputs/nltk_corpora/
+      md5: 0f5ffa2f0ac78640a89e95ee348f9e98.dir
+      size: 90497
+      nfiles: 26
   build_frontend:
     cmd: docker build -t nidhogg-frontend -f docker/frontend.Dockerfile .
     deps:
@@ -89,9 +91,19 @@ stages:
     - path: requirements.txt
       md5: 16773003e97ec5357dcb2149c85c7cd4
       size: 176
+      md5: 5e29ac892573c8a6aedb517d93073fa8
+      size: 674
+    - path: outputs/models/
+      md5: 0990e7ed02d30e4713ee4cc62fc11e96.dir
+      size: 27566987
+      nfiles: 3
+    - path: outputs/nltk_corpora/
+      md5: 0f5ffa2f0ac78640a89e95ee348f9e98.dir
+      size: 90497
+      nfiles: 26
     - path: src/common/
-      md5: 7a6d386c4238d1baf9fddfa805f5bd2c.dir
-      size: 3093
+      md5: bbf2c948175c8d9cc858212095d5a7f5.dir
+      size: 3680
       nfiles: 4
     - path: src/inference.py
       md5: e849d51d5159902d2524188903c65a70
@@ -109,3 +121,6 @@ stages:
       md5: 30671d1e7a2b90698ca6aa6bed9389f4.dir
       size: 3046
       nfiles: 4
+    - path: src/inference_api.py
+      md5: 0a4d4e5f4ce8234007d47cb43c3d9d01
+      size: 2638

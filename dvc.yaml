@@ -1,26 +1,18 @@
 stages:
-  preprocess:
-    cmd: python3 src/preprocess_data.py
+  train:
+    cmd: python3 src/train_model.py data/ outputs/nltk_corpora/ outputs/models/
     deps:
-    - src/preprocess_data.py
+    - src/train_model.py
     - src/common/
     - data/
     outs:
-    - outputs/processed_data/
-    - outputs/models/vectorizer.pkl
-  train:
-    cmd: python3 src/train_model.py
-    deps:
-    - src/common/
-    - src/train_model.py
-    - outputs/processed_data/
-    - outputs/models/vectorizer.pkl
-    outs:
-    - outputs/models/tfidf_model.pkl
+    - outputs/nltk_corpora/
+    - outputs/models/
   build_inference:
     cmd: docker build -t nidhogg-inference -f docker/inference.Dockerfile .
     deps:
     - docker/inference.Dockerfile
+    - requirements.txt
     - src/inference.py
     - src/common/
     - outputs/models/vectorizer.pkl
@@ -36,5 +28,6 @@ stages:
     cmd: docker build -t nidhogg-frontend -f docker/frontend.Dockerfile .
     deps:
     - docker/frontend.Dockerfile
+    - requirements.txt
     - src/frontend/
     - requirements.txt

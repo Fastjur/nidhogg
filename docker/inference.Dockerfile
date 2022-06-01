@@ -15,16 +15,12 @@ RUN pip3 install -r requirements.txt
 COPY src/inference.py .
 RUN mkdir common
 COPY src/common/ ./common/
-COPY outputs/processed_data/tags.txt .
-COPY outputs/models/vectorizer.pkl .
-COPY outputs/models/tfidf_model.pkl .
+COPY outputs/nltk_corpora/ .
+COPY outputs/models/ .
 
-
-ENV FLASK_APP=inference.py
-
-# Expose port 8080 where the HTTP server serves
-EXPOSE 8080
+# Expose port 5000 where the HTTP server serves
+EXPOSE 5000
 
 # Start Python HTTP server application
-ENTRYPOINT ["flask"]
-CMD ["run", "--host", "0.0.0.0", "--port", "8080"]
+ENTRYPOINT ["python3"]
+CMD ["inference.py", "./"]
