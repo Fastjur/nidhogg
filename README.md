@@ -39,6 +39,11 @@ You can test out the github actions locally using the `act` tool.
 4. Then you can test out actions using act, see their page for more instructions.
    You have to include the secrets file using `act --secret-file act.secrets <any other options or commands>`
 
+## Releasing a new version
+By default, any push to the main branch will trigger a release.
+This release is by default bumping only the minor version.
+If you want to manually bump the version, please see https://github.com/anothrNick/github-tag-action#bumping
+
 ## Additions
 
 - Template code from: https://github.com/mengdong/python-ml-structure
