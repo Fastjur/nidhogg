@@ -23,4 +23,3 @@ stages:
     - docker/frontend.Dockerfile
     - requirements.txt
     - src/frontend/
-    - requirements.txt
