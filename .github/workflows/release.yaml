@@ -1,7 +1,7 @@
 name: Release a new version on a pushed version tag
 
 on:
-  create:
+  push:
     tags:
       - v*
 
