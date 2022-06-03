@@ -1,3 +1,7 @@
+[![Train model, build containers and create a new version tag](https://github.com/Fastjur/nidhogg/actions/workflows/build.yaml/badge.svg)](https://github.com/Fastjur/nidhogg/actions/workflows/build.yaml)
+[![Code Scanning - Security Analysis Action](https://github.com/Fastjur/nidhogg/actions/workflows/codeQL.yaml/badge.svg)](https://github.com/Fastjur/nidhogg/actions/workflows/codeQL.yaml)
+[![Run tests](https://github.com/Fastjur/nidhogg/actions/workflows/test.yaml/badge.svg)](https://github.com/Fastjur/nidhogg/actions/workflows/test.yaml)
+[![Run mllint](https://github.com/Fastjur/nidhogg/actions/workflows/linter.yaml/badge.svg)](https://github.com/Fastjur/nidhogg/actions/workflows/linter.yaml)
 
 ## How to run locally
 Make sure you have installed [minikube](https://minikube.sigs.k8s.io/docs/start/), [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/), [Terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli) and [docker](https://www.docker.com/).
