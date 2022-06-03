@@ -1,3 +1,7 @@
+[![Train model, build containers and create a new version tag](https://github.com/Fastjur/nidhogg/actions/workflows/build.yaml/badge.svg)](https://github.com/Fastjur/nidhogg/actions/workflows/build.yaml)
+[![Code Scanning - Security Analysis Action](https://github.com/Fastjur/nidhogg/actions/workflows/codeQL.yaml/badge.svg)](https://github.com/Fastjur/nidhogg/actions/workflows/codeQL.yaml)
+[![Run tests](https://github.com/Fastjur/nidhogg/actions/workflows/test.yaml/badge.svg)](https://github.com/Fastjur/nidhogg/actions/workflows/test.yaml)
+[![Run mllint](https://github.com/Fastjur/nidhogg/actions/workflows/linter.yaml/badge.svg)](https://github.com/Fastjur/nidhogg/actions/workflows/linter.yaml)
 
 ## How to run locally
 Make sure you have installed [minikube](https://minikube.sigs.k8s.io/docs/start/), [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/), [Terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli) and [docker](https://www.docker.com/).
@@ -7,9 +11,12 @@ minikube start
 ```
 
 ### Building local image
-Note that if you want to run your local images, you need to execute the following commands.
+Note that if you want to run your local images, you need to have installed [dvc](https://dvc.org/) and execute the following commands.
 ```
 eval $(minikube docker-env)
+python3 -m venv venv # Only if you have not already created a venv directory!
+source venv/bin/activate
+pip install -r requirements.txt
 dvc repro
 ```
 
