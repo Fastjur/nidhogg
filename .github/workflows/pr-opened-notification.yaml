@@ -1,0 +1,21 @@
+name: Notify PR Opened
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  notify-telegram:
+    name: Notify PR Opened - Telegram
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Notify Telegram
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          cd notifications
+          python3 telegram.py pr_opened "${{ github.actor }}" "${{ github.event.pull_request.title }}" "${{ github.event.pull_request.html_url }}"
