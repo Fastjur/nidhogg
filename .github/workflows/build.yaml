@@ -1,4 +1,4 @@
-name: Train model, build containers and create a new version tag
+name: Train model, build and release
 
 on:
   push:
@@ -61,3 +61,10 @@ jobs:
         run: |
           docker image push --all-tags ghcr.io/fastjur/nidhogg/nidhogg-inference
           docker image push --all-tags ghcr.io/fastjur/nidhogg/nidhogg-frontend
+
+      - name: Create a Release
+        if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
+        uses: ncipollo/release-action@v1.10.0
+        with:
+          generateReleaseNotes: true
+          tag: ${{ steps.bumpVersion.outputs.tag }}
