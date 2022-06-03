@@ -12,13 +12,13 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+      - name: Install poetry
+        run: pipx install poetry
       - name: Install python 3.9
         uses: actions/setup-python@v3
         with:
           python-version: "3.9"
-          cache: pip
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
+          cache: poetry
       - name: Setup Python dependencies
         run: poetry install
       - name: Notify Telegram
