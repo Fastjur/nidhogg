@@ -7,7 +7,7 @@ on:
 
 jobs:
   mllint:
-    name: "Run mllint"
+    name: "MLLint"
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
@@ -15,17 +15,20 @@ jobs:
       - name: "Checkout code"
         uses: actions/checkout@v3
 
-      - name: "Install python"
+      - name: "Install python 3.9"
         uses: actions/setup-python@v3
         with:
-          python-version: "3.7"
+          python-version: "3.9"
           cache: pip
 
-      - name: "Install mllint"
-        run: pip install --upgrade mllint
+      - name: "Install Poetry"
+        uses: snok/install-poetry@v1
+
+      - name: "Setup Python dependencies"
+        run: poetry install
 
       - name: "Run mllint"
-        run: mllint -o mllint.md
+        run: poetry run mllint -o mllint.md
 
       - name: "Sanitize mllint output"
         run: |
