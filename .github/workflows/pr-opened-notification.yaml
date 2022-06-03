@@ -27,4 +27,4 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
           cd notifications
-          python3 telegram.py pr_opened "${{ github.actor }}" "${{ github.event.pull_request.title }}" "${{ github.event.pull_request.html_url }}"
+          poetry run python3 telegram.py pr_opened "${{ github.actor }}" "${{ github.event.pull_request.title }}" "${{ github.event.pull_request.html_url }}"
