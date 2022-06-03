@@ -51,9 +51,6 @@ stages:
     - path: docker/frontend.Dockerfile
       md5: 769a2b25d3c755fb5beea925a366953a
       size: 611
-    - path: requirements.txt
-      md5: 039e5b7e2aff9c041632a709e98874a0
-      size: 134
     - path: src/frontend/
       md5: 4d1dd56a52a8241260df553dde3fa96b.dir
       size: 2114
@@ -80,8 +77,14 @@ stages:
     cmd: docker build -t nidhogg-inference -f docker/inference.Dockerfile .
     deps:
     - path: docker/inference.Dockerfile
-      md5: 5e29ac892573c8a6aedb517d93073fa8
-      size: 674
+      md5: 3ffa414e3c7076ae526427709e37619a
+      size: 773
+    - path: outputs/models/tfidf_model.pkl
+      md5: d73b45c8abe684bc1a3136490031e8da
+      size: 21526653
+    - path: outputs/models/vectorizer.pkl
+      md5: acbb1961b64a8847879253b6885a8b10
+      size: 6039578
     - path: outputs/models/
       md5: 0990e7ed02d30e4713ee4cc62fc11e96.dir
       size: 27566987
@@ -93,6 +96,22 @@ stages:
     - path: src/common/
       md5: bbf2c948175c8d9cc858212095d5a7f5.dir
       size: 3680
+      nfiles: 4
+    - path: src/inference.py
+      md5: e849d51d5159902d2524188903c65a70
+      size: 1406
+  build_alertmetrics:
+    cmd: docker build -t alertmetrics -f docker/alertmetrics.Dockerfile .
+    deps:
+    - path: docker/alertmetrics.Dockerfile
+      md5: b43a52210da2e2cbd1870287be487da7
+      size: 619
+    - path: requirements.txt
+      md5: 16773003e97ec5357dcb2149c85c7cd4
+      size: 176
+    - path: src/alertmetrics/
+      md5: 30671d1e7a2b90698ca6aa6bed9389f4.dir
+      size: 3046
       nfiles: 4
     - path: src/inference_api.py
       md5: 0a4d4e5f4ce8234007d47cb43c3d9d01
