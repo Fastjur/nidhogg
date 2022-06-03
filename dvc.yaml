@@ -1,6 +1,6 @@
 stages:
   train:
-    cmd: python3 src/train_model.py data/ outputs/nltk_corpora/ outputs/models/
+    cmd: poetry run python3 src/train_model.py data/ outputs/nltk_corpora/ outputs/models/
     deps:
     - src/train_model.py
     - src/common/
@@ -12,21 +12,20 @@ stages:
     cmd: docker build -t nidhogg-inference -f docker/inference.Dockerfile .
     deps:
     - docker/inference.Dockerfile
-    - requirements.txt
+    - poetry.lock
     - src/inference.py
     - src/common/
     - outputs/models/vectorizer.pkl
     - outputs/models/tfidf_model.pkl
-    - requirements.txt
   build_alertmetrics:
     cmd: docker build -t alertmetrics -f docker/alertmetrics.Dockerfile .
     deps:
     - docker/alertmetrics.Dockerfile
     - src/alertmetrics/
-    - requirements.txt  
+    - poetry.lock
   build_frontend:
     cmd: docker build -t nidhogg-frontend -f docker/frontend.Dockerfile .
     deps:
     - docker/frontend.Dockerfile
-    - requirements.txt
+    - poetry.lock
     - src/frontend/

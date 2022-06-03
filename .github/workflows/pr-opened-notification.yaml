@@ -12,10 +12,19 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+      - name: Install poetry
+        run: pipx install poetry
+      - name: Install python 3.9
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.9"
+          cache: poetry
+      - name: Setup Python dependencies
+        run: poetry install
       - name: Notify Telegram
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
           cd notifications
-          python3 telegram.py pr_opened "${{ github.actor }}" "${{ github.event.pull_request.title }}" "${{ github.event.pull_request.html_url }}"
+          poetry run python3 telegram.py pr_opened "${{ github.actor }}" "${{ github.event.pull_request.title }}" "${{ github.event.pull_request.html_url }}"

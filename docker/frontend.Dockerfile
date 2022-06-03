@@ -8,8 +8,10 @@ RUN apt install python3-pip python3-venv -y
 RUN python3 -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 RUN python3 -m pip install --upgrade pip
-COPY requirements.txt .
-RUN pip install -r requirements.txt
+RUN pip install poetry
+COPY pyproject.toml .
+COPY poetry.lock .
+RUN poetry install
 
 # Copy application files
 COPY src/frontend/app.py .
@@ -19,5 +21,5 @@ COPY src/frontend/templates/ ./templates/
 EXPOSE 5000
 
 # Start Python HTTP server application
-ENTRYPOINT ["flask"]
+ENTRYPOINT ["poetry", "run", "flask"]
 CMD ["run", "--host", "0.0.0.0", "--port", "5000"]
