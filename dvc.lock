@@ -24,22 +24,26 @@ stages:
       nfiles: 6
   train:
     cmd: poetry run python3 src/train_model.py data/ outputs/nltk_corpora/ outputs/models/
+      outputs/metrics/
     deps:
     - path: data/
       md5: 3d9e62a9c241fcfcf634384a95dd4cf4.dir
       size: 10408878
       nfiles: 4
     - path: src/common/
-      md5: 5ad06006baaaba5f5c8aa731440df532.dir
-      size: 3273
-      nfiles: 3
+      md5: dcc406e579aef44d444d1fd63020df8e.dir
+      size: 5222
+      nfiles: 5
     - path: src/train_model.py
-      md5: 2772c3ca8d8823b5436b2f95abd7445f
-      size: 4231
+      md5: 2660f5588ff26344a532836484c7dcb4
+      size: 4897
     outs:
+    - path: outputs/metrics/model_metrics.json
+      md5: df5428598ecdac9c4392da0941c3019e
+      size: 96
     - path: outputs/models/
-      md5: 880574d0c760ae03ded3dc92bd28b74f.dir
-      size: 27566988
+      md5: 88d254f23962352bd81950fd7f4164bc.dir
+      size: 27566989
       nfiles: 3
     - path: outputs/nltk_corpora/
       md5: 0f5ffa2f0ac78640a89e95ee348f9e98.dir

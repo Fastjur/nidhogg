@@ -7,9 +7,7 @@ def get_stopwords(download_dir):
     nltk.data.path = [download_dir]
     downloader = Downloader(download_dir=download_dir)
     if not downloader.is_installed("stopwords"):
-        print("Downloading nltk stopwords corpus... ", end="", flush=True)
         nltk.download("stopwords", download_dir)
-        print("Done.")
     from nltk.corpus import stopwords
     return stopwords
 
