@@ -1,0 +1,6 @@
+🚨 *Pull Request with low model precision!*
+Avg precision: `{}`
+PR Author: `{}`.
+PR Title: _{}_.
+PR URL: `{}`
+_alert id_: `{}`

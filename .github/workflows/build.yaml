@@ -44,7 +44,8 @@ jobs:
         if: steps.read-model-precision.outputs.avg-precision < env.PRECISION_THRESHOLD
         run: |
           cd notifications
-          poetry run python3 telegram.py pr_opened "${{ github.actor }}" "${{ github.event.pull_request.title }}" "${{ github.event.pull_request.html_url }}"
+          poetry run python3 telegram.py low_precision \
+            "${{ github.actor }}" "${{ github.event.pull_request.title }}" "${{ github.event.pull_request.html_url }}" "${{ steps.read-model-precision.outputs.avg-precision }}"
 
       # On pushes to main, we bump the minor version and push a new v* tag
       - name: Bump version and push tag
