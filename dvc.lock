@@ -96,8 +96,8 @@ stages:
       size: 3687
       nfiles: 4
     - path: src/inference.py
-      md5: ca9c2ad5b790e6bcd4cf9f2c4e3cf710
-      size: 1400
+      md5: 84def5c2706bfa5c9c64baef57a68958
+      size: 1775
   build_alertmetrics:
     cmd: docker build -t alertmetrics -f docker/alertmetrics.Dockerfile .
     deps:
@@ -108,6 +108,6 @@ stages:
       md5: 5bb117013faa6b076da07b81efa3457b
       size: 192281
     - path: src/alertmetrics/
-      md5: da7966dbcec42527cf73185c9d819512.dir
-      size: 3352
+      md5: ceedf5e4d16a8b36f3f8cf09085db5f4.dir
+      size: 3027
       nfiles: 4

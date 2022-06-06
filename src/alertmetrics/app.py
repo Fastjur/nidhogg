@@ -10,11 +10,9 @@ app.wsgi_app = DispatcherMiddleware(app.wsgi_app, {
     "/metrics" : make_wsgi_app( )
 })
 
-feedback = {}
-
 counters = {
-    "alertmetrics_positive" : Counter("positive_feedback", "Positive feedback on notifications"),
-    "alertmetrics_negative" : Counter("negative_feedback", "Negative feedback on notifications")
+    "alertmetrics_positive" : Counter("positive_feedback", "Positive feedback on notifications", ["id", "category"]),
+    "alertmetrics_negative" : Counter("negative_feedback", "Negative feedback on notifications", ["id", "category"])
 }
 
 info = Info("alertmetrics_feedback", "Alertmetrics info")
@@ -22,9 +20,9 @@ info = Info("alertmetrics_feedback", "Alertmetrics info")
 def process_feedback(id, category, vote):
 
     if vote == "positive":
-        counters["alertmetrics_positive"].labels(id, category).inc()
+        counters["alertmetrics_positive"].labels(id, category).inc(1)
     elif vote == "negative":
-        counters["alertmetrics_negative"].labels(id, category).inc()
+        counters["alertmetrics_negative"].labels(id, category).inc(1)
 
     info.info({
         "id" : id,
@@ -32,16 +30,6 @@ def process_feedback(id, category, vote):
         "vote" : vote,
         "time" : datetime.datetime.now().isoformat()
     })
-
-    if id not in feedback:
-        feedback[id] = {
-            "category": category,
-            "positive": 1 if vote == "positive" else 0,
-            "negative": 1 if vote == "negative" else 0
-        }
-    else:
-        feedback[id]["positive"] += 1 if vote == "positive" else 0
-        feedback[id]["negative"] += 1 if vote == "negative" else 0
 
 @app.route("/")
 def hello_world():

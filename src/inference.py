@@ -4,17 +4,26 @@ import numpy as np
 import time
 import sys
 
+from werkzeug.middleware.dispatcher import DispatcherMiddleware
+from prometheus_client import Summary, Gauge, Counter, make_wsgi_app, Info
+
 from common.preprocessing import preprocess_sentence
 from common.predicting import predict
 
 app = Flask(__name__)
-tag_predictions = {}
-query_time = -1
+
+app.wsgi_app = DispatcherMiddleware(app.wsgi_app, {
+    "/metrics" : make_wsgi_app( )
+})
 
 model_folder = "."
 vectorizer = pickle.load(open(f"{model_folder}/vectorizer.pkl", "rb"))
 model = pickle.load(open(f"{model_folder}/tfidf_model.pkl", "rb"))
 tags = np.loadtxt(f"{model_folder}/tags.txt", dtype=str, delimiter="\n")
+
+queries = Counter("inference_queries", "Total queries")
+predictions_count = Counter("inference_predictions", "Predictions", ["label"])
+inference_time = Summary("inference_time", "Time to predict tags")
 
 
 @app.route("/", methods=["POST"])
@@ -32,22 +41,13 @@ def predict_question_tags():
     predicted = predict(processed, model, tags)
 
     for pred in predicted:
-        tag_predictions[pred] = 1 if pred not in tag_predictions else tag_predictions[pred] + 1
+        predictions_count.labels(pred).inc(1)
 
     end_time = current_milli_time()
-    query_time = end_time - start_time
+    inference_time.observe(end_time - start_time)
+    queries.inc()
 
     return {"tags": predicted}
-
-@app.route('/metrics')
-def metrics():
-    metrics = ""
-    for tag in tag_predictions:
-        metrics += f'predicted_total{{tag="{tag}"}} {tag_predictions[tag]}\n'
-    
-    metrics += f'query_time_avg {query_time}\n'
-
-    return metrics
 
 def current_milli_time():
     return round(time.time() * 1000)
