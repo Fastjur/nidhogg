@@ -4,19 +4,27 @@
 [![Run mllint](https://github.com/Fastjur/nidhogg/actions/workflows/linter.yaml/badge.svg)](https://github.com/Fastjur/nidhogg/actions/workflows/linter.yaml)
 
 ## How to run locally
-Make sure you have installed [minikube](https://minikube.sigs.k8s.io/docs/start/), [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/), [Terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli) and [docker](https://www.docker.com/).
+Make sure you have installed
+[minikube](https://minikube.sigs.k8s.io/docs/start/),
+[kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/),
+[Terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli),
+and [docker](https://www.docker.com/).
 
 ```
 minikube start
 ```
 
 ### Building local image
-Note that if you want to run your local images, you need to have installed [dvc](https://dvc.org/) and execute the following commands.
+Note that if you want to run your local images, you need to have installed [dvc](https://dvc.org/) and [poetry](https://python-poetry.org), then execute the following commands.
+
 ```
 eval $(minikube docker-env)
-python3 -m venv venv # Only if you have not already created a venv directory!
-source venv/bin/activate
-pip install -r requirements.txt
+conda create -n [env name] python=3.9
+conda activate [env name]
+conda install poetry
+poetry env use 3.9 # This returns a new poetry environment with python 3.9
+source /path/to/created/poetry/environment/activate # Switch to the poetry environment (you should also set this environment as the python interpreter in your IDE)
+poetry install
 dvc repro
 ```
 
