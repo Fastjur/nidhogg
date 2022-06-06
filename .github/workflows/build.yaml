@@ -56,8 +56,11 @@ jobs:
 
             const metricsReport = `
               <details><summary>Model metrics output:</summary>
+              
               # Model metrics
+              
               ${{ steps.read-model-metrics.outputs.markdown-metrics }}
+              
               </details>`;
 
             // 3. If we have a comment, update it, otherwise create a new one
