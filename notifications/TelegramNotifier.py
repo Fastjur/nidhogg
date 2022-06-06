@@ -54,7 +54,7 @@ class TelegramNotifier:
             ]
             self.notify(message_text, inline_keyboard_markup)
 
-    def notify_pr_opened(self, pr_author, pr_title, pr_url, model_precision):
+    def notify_low_precision(self, pr_author, pr_title, pr_url, model_precision):
         with open('templates/low_precision.txt') as f:
             message_type = 'low_precision'
             message_text = ''.join(f.readlines()).format(model_precision, pr_author, pr_title, pr_url, message_type)
