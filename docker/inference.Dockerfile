@@ -22,7 +22,7 @@ COPY outputs/models/ .
 
 ENV FLASK_APP=inference.py
 
-# Expose port 5000 where the HTTP server serves
+# Expose port 8080 where the HTTP server serves
 EXPOSE 8080
 
 # Start Python HTTP server application
