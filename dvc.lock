@@ -30,16 +30,16 @@ stages:
       size: 10408878
       nfiles: 4
     - path: src/common/
-      md5: 5ad06006baaaba5f5c8aa731440df532.dir
-      size: 3273
-      nfiles: 3
+      md5: 91eb3e7bdd66518f4d245e45932a7e12.dir
+      size: 3687
+      nfiles: 4
     - path: src/train_model.py
       md5: 2772c3ca8d8823b5436b2f95abd7445f
       size: 4231
     outs:
     - path: outputs/models/
-      md5: 880574d0c760ae03ded3dc92bd28b74f.dir
-      size: 27566988
+      md5: 0067ce045e3e9c08a9d86edca3d6810c.dir
+      size: 27567028
       nfiles: 3
     - path: outputs/nltk_corpora/
       md5: 0f5ffa2f0ac78640a89e95ee348f9e98.dir
@@ -49,15 +49,15 @@ stages:
     cmd: docker build -t nidhogg-frontend -f docker/frontend.Dockerfile .
     deps:
     - path: docker/frontend.Dockerfile
-      md5: 11bffecffb290e4df201c8f5b802f923
-      size: 651
+      md5: f9f13a5601c94d57ffa932c67e76e01e
+      size: 660
     - path: poetry.lock
-      md5: b7cf33e8b1f3779b963396c21efd9df0
-      size: 193328
+      md5: 5bb117013faa6b076da07b81efa3457b
+      size: 192281
     - path: src/frontend/
-      md5: 2894d6d06bc6f0fcc591429d2425e051.dir
-      size: 1322
-      nfiles: 2
+      md5: 4d1dd56a52a8241260df553dde3fa96b.dir
+      size: 2114
+      nfiles: 3
   build_backend:
     cmd: docker build -t nidhogg-backend -f inference/Dockerfile .
     deps:
@@ -80,34 +80,34 @@ stages:
     cmd: docker build -t nidhogg-inference -f docker/inference.Dockerfile .
     deps:
     - path: docker/inference.Dockerfile
-      md5: d793ac30650b25ba7314203420f13333
-      size: 699
+      md5: fd134e42631c2ff280672646ede9e1d9
+      size: 758
     - path: outputs/models/tfidf_model.pkl
-      md5: 1a0a8fa4b8d05791f905750ade2897fa
-      size: 21526649
+      md5: c8ceb3b2295248beded41e7c733fd094
+      size: 21526657
     - path: outputs/models/vectorizer.pkl
-      md5: 5e94c05e7eb5bf789bebdf058fb49280
-      size: 6039558
+      md5: c797b9827e3e8a2b2c255a074afbc6ce
+      size: 6039590
     - path: poetry.lock
-      md5: b7cf33e8b1f3779b963396c21efd9df0
-      size: 193328
+      md5: 5bb117013faa6b076da07b81efa3457b
+      size: 192281
     - path: src/common/
-      md5: 5ad06006baaaba5f5c8aa731440df532.dir
-      size: 3273
-      nfiles: 3
+      md5: 91eb3e7bdd66518f4d245e45932a7e12.dir
+      size: 3687
+      nfiles: 4
     - path: src/inference.py
-      md5: 30460c86db9698040a692779129d07cf
-      size: 1169
+      md5: 84def5c2706bfa5c9c64baef57a68958
+      size: 1775
   build_alertmetrics:
     cmd: docker build -t alertmetrics -f docker/alertmetrics.Dockerfile .
     deps:
     - path: docker/alertmetrics.Dockerfile
-      md5: 0d65e691c8024fdbc2d3ab0f5adb009a
-      size: 659
+      md5: e4cfdd75f91c303e7cc852b50b064346
+      size: 668
     - path: poetry.lock
-      md5: b7cf33e8b1f3779b963396c21efd9df0
-      size: 193328
+      md5: 5bb117013faa6b076da07b81efa3457b
+      size: 192281
     - path: src/alertmetrics/
-      md5: a33846be3702ceb97ca5b2d7cd0badf9.dir
-      size: 1541
-      nfiles: 3
+      md5: ceedf5e4d16a8b36f3f8cf09085db5f4.dir
+      size: 3027
+      nfiles: 4

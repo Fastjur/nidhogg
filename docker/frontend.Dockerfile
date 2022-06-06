@@ -11,7 +11,7 @@ RUN python3 -m pip install --upgrade pip
 RUN pip install poetry
 COPY pyproject.toml .
 COPY poetry.lock .
-RUN poetry install
+RUN poetry install --no-dev
 
 # Copy application files
 COPY src/frontend/app.py .
