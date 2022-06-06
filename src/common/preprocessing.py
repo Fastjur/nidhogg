@@ -29,7 +29,8 @@ def preprocess_sentences(X_vals, vectorizer, stopwords):
     X_vals = vectorizer.transform(X_vals)
     return X_vals
 
-def preprocess_sentence(sentence, vectorizer, stopwords):
+def preprocess_sentence(sentence, vectorizer):
+    stopwords = get_stopwords("./nltk_data")
     sentence = process_question(sentence, stopwords)
     sentence = vectorizer.transform([sentence])
     return sentence

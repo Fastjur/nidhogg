@@ -11,7 +11,7 @@ RUN python3 -m pip install --upgrade pip
 RUN pip install poetry
 COPY pyproject.toml .
 COPY poetry.lock .
-RUN poetry install
+RUN poetry install --no-dev
 
 # Copy application files and trained models
 COPY src/inference.py .
@@ -20,9 +20,11 @@ COPY src/common/ ./common/
 COPY outputs/nltk_corpora/ .
 COPY outputs/models/ .
 
+ENV FLASK_APP=inference.py
+
 # Expose port 5000 where the HTTP server serves
-EXPOSE 5000
+EXPOSE 8080
 
 # Start Python HTTP server application
-ENTRYPOINT ["poetry", "run", "python3"]
-CMD ["inference.py", "./"]
+ENTRYPOINT ["poetry", "run", "flask"]
+CMD ["run", "--host", "0.0.0.0", "--port", "8080"]

@@ -11,10 +11,11 @@ jupyter = "1.0.0"
 matplotlib = "3.3.4"
 nltk = "3.7"
 numpy = "1.21.0"
-pandas = "1.2.2"
+pandas = "1.4.2"
 requests = "2.27.1"
-scikit-learn = "0.24.1"
+scikit-learn = "1.1.1"
 scipy = "1.7.3"
+prometheus-client = "0.14.1"
 
 [tool.poetry.dev-dependencies]
 mllint = "0.12.1"

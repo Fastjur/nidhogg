@@ -11,6 +11,11 @@ app = Flask(__name__)
 tag_predictions = {}
 query_time = -1
 
+model_folder = "."
+vectorizer = pickle.load(open(f"{model_folder}/vectorizer.pkl", "rb"))
+model = pickle.load(open(f"{model_folder}/tfidf_model.pkl", "rb"))
+tags = np.loadtxt(f"{model_folder}/tags.txt", dtype=str, delimiter="\n")
+
 
 @app.route("/", methods=["POST"])
 def predict_question_tags():
