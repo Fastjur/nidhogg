@@ -1,10 +1,12 @@
 from ast import literal_eval
+import json
 import numpy as np
 import os
 import pandas as pd
 import pickle
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.preprocessing import MultiLabelBinarizer
+from sklearn.metrics import accuracy_score, f1_score, average_precision_score
 from sklearn.multiclass import OneVsRestClassifier
 from sklearn.linear_model import LogisticRegression
 import sys
@@ -86,19 +88,26 @@ def train_classifier(X_train, y_train, penalty='l1', C=1):
     clf = OneVsRestClassifier(clf)
     clf.fit(X_train, y_train)
     
-    return clf  
+    return clf
+
+def report_evaluation_scores(y_val, predicted):
+    accuracy = accuracy_score(y_val, predicted)
+    f1 = f1_score(y_val, predicted, average='weighted')
+    avg_precision = average_precision_score(y_val, predicted, average='macro')
+    with open(f"{metrics_folder}/model_metrics.json", "w") as f:
+        json.dump({"accuracy": accuracy, "f1": f1, "avg_precision": avg_precision}, f)
+    print(f"Accuracy: {accuracy} \t F1 score: {f1} \t Average precision: {avg_precision}")
 
 if __name__ == "__main__":
-    if len(sys.argv) != 4:
-        print("Usage: python train_model.py [data_folder] [nltk_corpora_folder] [model_folder]")
+    if len(sys.argv) != 5:
+        print("Usage: python train_model.py [data_folder] [nltk_corpora_folder] [model_folder] [metrics_folder]")
         exit()
-    [_, data_folder, nltk_corpora_folder, model_folder] = sys.argv
-    if not os.path.exists(model_folder):
-        os.makedirs(model_folder)
-    if not os.path.exists(nltk_corpora_folder):
-        os.makedirs(nltk_corpora_folder)
+    [_, data_folder, nltk_corpora_folder, model_folder, metrics_folder] = sys.argv
+    for folder in [model_folder, nltk_corpora_folder, metrics_folder]:
+        if not os.path.exists(folder):
+            os.makedirs(folder)
 
-    print("Preprocessing data and training vectorizer... ", end="", flush=True)
+    print("Preprocessing data and training vectorizer... ")
     X_train, y_train, X_val, y_val, X_test, vectorizer, tags = preprocess_data(data_folder, nltk_corpora_folder)
     print("Done.")
 
@@ -107,7 +116,10 @@ if __name__ == "__main__":
     clf = train_classifier(X_train, y_train, penalty='l2', C=10) # TODO hyperparameters
     print("Done.")
 
-    # TODO evaluate trained model
+    print("Evaluating model...")
+    y_val_predicted = clf.predict(X_val)
+    report_evaluation_scores(y_val, y_val_predicted)
+    print("Done.")
 
     print("Saving trained model... ", end="", flush=True)
     with open(f"{model_folder}/vectorizer.pkl", "wb") as f:

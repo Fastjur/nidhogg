@@ -25,3 +25,9 @@ if __name__ == '__main__':
         pr_title = sys.argv[3]
         pr_url = sys.argv[4]
         telegram_notifier.notify_pr_opened(pr_author, pr_title, pr_url)
+    elif message_type == 'low_precision':
+        if len(sys.argv) != 6:
+            print(f"Usage: {sys.argv[0]} low_precision <pr_author> <pr_title> <pr_url> <model_precision>")
+            sys.exit(1)
+        [_, _, pr_author, pr_title, pr_url, model_precision] = sys.argv
+        telegram_notifier.notify_low_precision(pr_author, pr_title, pr_url, model_precision)

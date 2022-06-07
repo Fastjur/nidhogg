@@ -31,6 +31,65 @@ jobs:
       - name: Run DVC pipeline
         run: |
           dvc repro
+      - name: Read model metrics
+        id: read-model-metrics
+        run: |
+          MARKDOWN_METRICS=$(dvc metrics show --md)
+          MARKDOWN_METRICS="${MARKDOWN_METRICS//$'\n'/'%0A'}"
+          echo "::set-output name=markdown-metrics::$MARKDOWN_METRICS"
+          AVG_PRECISION=$(dvc metrics show | awk '/model_metrics.json/ {print $3; exit 0;}')
+          echo "::set-output name=avg-precision::$AVG_PRECISION"
+      - name: "Update PR with model metrics"
+        if: ${{ !env.ACT }}
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            // 1. Retrieve existing bot comment if it exists
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            })
+            const botComment = comments.find(comment => {
+              return comment.user.type === 'Bot' && comment.body.includes('Model metrics')
+            })
+
+            const metricsReport = `
+              <details><summary>Model metrics output:</summary>
+              
+              # Model metrics
+              
+              ${{ steps.read-model-metrics.outputs.markdown-metrics }}
+              
+              </details>`;
+
+            // 3. If we have a comment, update it, otherwise create a new one
+            if (botComment) {
+              github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: metricsReport
+              })
+            } else {
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: metricsReport
+              })
+            }
+      - name: Model precision warning
+        env:
+          PRECISION_THRESHOLD: ${{ 0.4 }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        if: steps.read-model-metrics.outputs.avg-precision < env.PRECISION_THRESHOLD
+        run: |
+          cd notifications
+          poetry run python3 telegram.py low_precision \
+            "${{ github.actor }}" "${{ github.event.pull_request.title }}" "${{ github.event.pull_request.html_url }}" "${{ steps.read-model-precision.outputs.avg-precision }}"
 
       # On pushes to main, we bump the minor version and push a new v* tag
       - name: Bump version and push tag

@@ -1,6 +1,6 @@
 stages:
   train:
-    cmd: poetry run python3 src/train_model.py data/ outputs/nltk_corpora/ outputs/models/
+    cmd: poetry run python3 src/train_model.py data/ outputs/nltk_corpora/ outputs/models/ outputs/metrics/
     deps:
     - src/train_model.py
     - src/common/
@@ -8,6 +8,8 @@ stages:
     outs:
     - outputs/nltk_corpora/
     - outputs/models/
+    metrics:
+    - outputs/metrics/model_metrics.json
   build_inference:
     cmd: docker build -t nidhogg-inference -f docker/inference.Dockerfile .
     deps:
