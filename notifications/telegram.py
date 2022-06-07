@@ -3,7 +3,7 @@
 import sys
 import os
 
-from notifications.telegram_notifier import TelegramNotifier
+from telegram_notifier import TelegramNotifier
 
 if __name__ == '__main__':
     bot_token = os.environ['TELEGRAM_BOT_TOKEN']
