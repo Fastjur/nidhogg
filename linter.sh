@@ -1,1 +1,1 @@
-pylint --rcfile=.pylintrc frontend inference src
+pylint --rcfile=.pylintrc frontend inference src notifications
