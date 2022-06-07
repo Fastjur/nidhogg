@@ -30,7 +30,7 @@ jobs:
         uses: iterative/setup-dvc@v1
       - name: Run DVC pipeline
         run: |
-          dvc repro
+          dvc repro --force
       - name: Read model metrics
         id: read-model-metrics
         if: ${{ github.event_name == 'pull_request' }}
@@ -109,6 +109,8 @@ jobs:
           docker image tag nidhogg-inference:latest ghcr.io/fastjur/nidhogg/nidhogg-inference:${{ steps.bumpVersion.outputs.tag }}
           docker image tag nidhogg-frontend:latest ghcr.io/fastjur/nidhogg/nidhogg-frontend:latest
           docker image tag nidhogg-frontend:latest ghcr.io/fastjur/nidhogg/nidhogg-frontend:${{ steps.bumpVersion.outputs.tag }}
+          docker image tag alertmetrics:latest ghcr.io/fastjur/nidhogg/alertmetrics:latest
+          docker image tag alertmetrics:latest ghcr.io/fastjur/nidhogg/alertmetrics:${{ steps.bumpVersion.outputs.tag }}
 
       - name: Log in to the Container registry
         if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
@@ -123,6 +125,7 @@ jobs:
         run: |
           docker image push --all-tags ghcr.io/fastjur/nidhogg/nidhogg-inference
           docker image push --all-tags ghcr.io/fastjur/nidhogg/nidhogg-frontend
+          docker image push --all-tags ghcr.io/fastjur/nidhogg/alertmetrics
 
       - name: Create a Release
         if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
