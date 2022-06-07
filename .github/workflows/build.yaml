@@ -35,6 +35,7 @@ jobs:
         id: read-model-metrics
         run: |
           MARKDOWN_METRICS=$(dvc metrics show --md)
+          MARKDOWN_METRICS="${MARKDOWN_METRICS//$'\n'/'%0A'}"
           echo "::set-output name=markdown-metrics::$MARKDOWN_METRICS"
           AVG_PRECISION=$(dvc metrics show | awk '/model_metrics.json/ {print $3; exit 0;}')
           echo "::set-output name=avg-precision::$AVG_PRECISION"
