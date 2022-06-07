@@ -13,7 +13,7 @@ from common.predicting import predict
 app = Flask(__name__)
 
 app.wsgi_app = DispatcherMiddleware(app.wsgi_app, {
-    "/metrics" : make_wsgi_app( )
+    "/metrics": make_wsgi_app()
 })
 
 model_folder = "."
@@ -34,7 +34,7 @@ def predict_question_tags():
     question = request.form.get("question")
     if question is None:
         return "No question provided"
-    
+
     # Preprocess the question
     processed = preprocess_sentence(question, vectorizer)
     # Predict the tags
@@ -48,6 +48,7 @@ def predict_question_tags():
     queries.inc()
 
     return {"tags": predicted}
+
 
 def current_milli_time():
     return round(time.time() * 1000)
