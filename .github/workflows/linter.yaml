@@ -79,3 +79,24 @@ jobs:
                 body: mllintReport
               })
             }
+  linter:
+    name: "Python Linter"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout code"
+        uses: actions/checkout@v3
+
+      - name: Install poetry
+        run: pipx install poetry
+
+      - name: "Install python 3.9"
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.9"
+          cache: poetry
+
+      - name: "Setup Python dependencies"
+        run: poetry install
+
+      - name: "Run linter"
+        run: poetry run bash ./linter.sh
