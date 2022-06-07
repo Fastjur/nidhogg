@@ -1,18 +1,21 @@
-from ast import literal_eval
+""" The train_model module contains all code to train and evaluate the model. """
+
 import json
-import numpy as np
 import os
-import pandas as pd
 import pickle
+import sys
+from ast import literal_eval
+import numpy as np
+import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.preprocessing import MultiLabelBinarizer
 from sklearn.metrics import accuracy_score, f1_score, average_precision_score
 from sklearn.multiclass import OneVsRestClassifier
 from sklearn.linear_model import LogisticRegression
-import sys
 
 from common.preprocessing import get_stopwords, preprocess_sentences
 
+# pylint: disable=invalid-name, redefined-outer-name
 
 def train_tfidf_vectorizer(X_train):
     """
@@ -21,19 +24,22 @@ def train_tfidf_vectorizer(X_train):
     """
     tfidf_vectorizer = TfidfVectorizer(
         min_df=5, max_df=0.9, ngram_range=(
-            1, 2), token_pattern='(\\S+)')  # TODO hyperparameters
+            1, 2), token_pattern='(\\S+)')
     X_train = tfidf_vectorizer.fit_transform(X_train)
 
     return tfidf_vectorizer
 
 
 def read_data(filename):
+    """ Read raw data from CSV file. """
     data = pd.read_csv(filename, sep='\t')
     data['tags'] = data['tags'].apply(literal_eval)
     return data
 
 
+# pylint: disable=invalid-name
 def count_tags_and_words(X_train, y_train):
+    """ Count all tags and words in train corpus. """
     # Dictionary of all tags from train corpus with their counts.
     tags_counts = {}
     # Dictionary of all words from train corpus with their counts.
@@ -55,7 +61,9 @@ def count_tags_and_words(X_train, y_train):
     return (tags_counts, words_counts)
 
 
+# pylint: disable=too-many-locals
 def preprocess_data(raw_data_folder, nltk_corpora_folder):
+    """ Preprocess given data to vectors, removing stop words. """
     train = read_data(raw_data_folder + '/train.tsv')
     validation = read_data(raw_data_folder + '/validation.tsv')
     test = pd.read_csv(raw_data_folder + '/test.tsv', sep='\t')
@@ -64,10 +72,9 @@ def preprocess_data(raw_data_folder, nltk_corpora_folder):
     X_val, y_val = validation['title'].values, validation['tags'].values
     X_test = test['title'].values
 
-    (tags_counts, word_counts) = count_tags_and_words(X_train, y_train)
+    (tags_counts, _) = count_tags_and_words(X_train, y_train)
 
     vectorizer = train_tfidf_vectorizer(X_train)
-    vocab = vectorizer.vocabulary_
 
     stopwords = get_stopwords(nltk_corpora_folder)
     X_train = preprocess_sentences(X_train, vectorizer, stopwords)
@@ -81,6 +88,7 @@ def preprocess_data(raw_data_folder, nltk_corpora_folder):
     tags = sorted(tags_counts.keys())
 
     return X_train, y_train, X_val, y_val, X_test, vectorizer, tags
+# pylint: disable=too-many-locals
 
 
 def train_classifier(X_train, y_train, penalty='l1', C=1):
@@ -95,7 +103,7 @@ def train_classifier(X_train, y_train, penalty='l1', C=1):
         penalty=penalty,
         C=C,
         dual=False,
-        solver='liblinear')  # TODO hyperparameters
+        solver='liblinear')
     clf = OneVsRestClassifier(clf)
     clf.fit(X_train, y_train)
 
@@ -103,10 +111,11 @@ def train_classifier(X_train, y_train, penalty='l1', C=1):
 
 
 def report_evaluation_scores(y_val, predicted):
+    """ Evaluate model, print results and store results on disks. """
     accuracy = accuracy_score(y_val, predicted)
     f1 = f1_score(y_val, predicted, average='weighted')
     avg_precision = average_precision_score(y_val, predicted, average='macro')
-    with open(f"{metrics_folder}/model_metrics.json", "w") as f:
+    with open(f"{metrics_folder}/model_metrics.json", "w", encoding="utf-8") as f:
         json.dump({"accuracy": accuracy, "f1": f1,
                   "avg_precision": avg_precision}, f)
     print(
@@ -115,10 +124,12 @@ def report_evaluation_scores(y_val, predicted):
 
 if __name__ == "__main__":
     if len(sys.argv) != 5:
-        print(
-            "Usage: python train_model.py [data_folder] [nltk_corpora_folder] [model_folder] [metrics_folder]")
-        exit()
+        print("Usage: python train_model.py [data_folder] [nltk_corpora_folder]" +\
+              "[model_folder] [metrics_folder]")
+        sys.exit(1)
+    # pylint: disable=unbalanced-tuple-unpacking
     [_, data_folder, nltk_corpora_folder, model_folder, metrics_folder] = sys.argv
+    # pylint: enable=unbalanced-tuple-unpacking
     for folder in [model_folder, nltk_corpora_folder, metrics_folder]:
         if not os.path.exists(folder):
             os.makedirs(folder)
@@ -134,7 +145,7 @@ if __name__ == "__main__":
         X_train,
         y_train,
         penalty='l2',
-        C=10)  # TODO hyperparameters
+        C=10)
     print("Done.")
 
     print("Evaluating model...")
@@ -149,3 +160,4 @@ if __name__ == "__main__":
         pickle.dump(clf, f)
     np.savetxt(f"{model_folder}/tags.txt", tags, fmt='%s')
     print("Done.")
+    sys.exit(0)

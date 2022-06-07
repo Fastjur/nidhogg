@@ -3,7 +3,9 @@
 import sys
 import os
 
+# pylint: disable=import-error
 from telegram_notifier import TelegramNotifier
+# pylint: enable=import-error
 
 if __name__ == '__main__':
     bot_token = os.environ['TELEGRAM_BOT_TOKEN']
@@ -37,6 +39,8 @@ if __name__ == '__main__':
                 " <pr_url> <model_precision>"
             )
             sys.exit(1)
+        # pylint: disable=unbalanced-tuple-unpacking
         [_, _, pr_author, pr_title, pr_url, model_precision] = sys.argv
+        # pylint: enable=unbalanced-tuple-unpacking
         telegram_notifier.notify_low_precision(
             pr_author, pr_title, pr_url, model_precision)
