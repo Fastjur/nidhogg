@@ -33,6 +33,7 @@ jobs:
           dvc repro
       - name: Read model metrics
         id: read-model-metrics
+        if: ${{ github.event_name == 'pull_request' }}
         run: |
           MARKDOWN_METRICS=$(dvc metrics show --md)
           MARKDOWN_METRICS="${MARKDOWN_METRICS//$'\n'/'%0A'}"
@@ -40,7 +41,7 @@ jobs:
           AVG_PRECISION=$(dvc metrics show | awk '/model_metrics.json/ {print $3; exit 0;}')
           echo "::set-output name=avg-precision::$AVG_PRECISION"
       - name: "Update PR with model metrics"
-        if: ${{ !env.ACT }}
+        if: ${{ github.event_name == 'pull_request' && !env.ACT }}
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -81,6 +82,7 @@ jobs:
               })
             }
       - name: Model precision warning
+        if: ${{ github.event_name == 'pull_request' }}
         env:
           PRECISION_THRESHOLD: ${{ 0.4 }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
