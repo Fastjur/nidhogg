@@ -33,6 +33,7 @@ jobs:
           dvc repro
       - name: Read model metrics
         id: read-model-metrics
+        if: ${{ github.event_name == 'pull_request' }}
         run: |
           MARKDOWN_METRICS=$(dvc metrics show --md)
           MARKDOWN_METRICS="${MARKDOWN_METRICS//$'\n'/'%0A'}"
@@ -40,7 +41,7 @@ jobs:
           AVG_PRECISION=$(dvc metrics show | awk '/model_metrics.json/ {print $3; exit 0;}')
           echo "::set-output name=avg-precision::$AVG_PRECISION"
       - name: "Update PR with model metrics"
-        if: ${{ !env.ACT }}
+        if: ${{ github.event_name == 'pull_request' && !env.ACT }}
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -85,11 +86,11 @@ jobs:
           PRECISION_THRESHOLD: ${{ 0.4 }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        if: steps.read-model-metrics.outputs.avg-precision < env.PRECISION_THRESHOLD
+        if: ${{ steps.read-model-metrics.outputs.avg-precision < env.PRECISION_THRESHOLD && github.event_name == 'pull_request' }}
         run: |
           cd notifications
           poetry run python3 telegram.py low_precision \
-            "${{ github.actor }}" "${{ github.event.pull_request.title }}" "${{ github.event.pull_request.html_url }}" "${{ steps.read-model-precision.outputs.avg-precision }}"
+            "${{ github.actor }}" "${{ github.event.pull_request.title }}" "${{ github.event.pull_request.html_url }}" "${{ steps.read-model-metrics.outputs.avg-precision }}"
 
       # On pushes to main, we bump the minor version and push a new v* tag
       - name: Bump version and push tag
