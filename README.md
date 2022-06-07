@@ -62,12 +62,3 @@ If you want to manually bump the version, please see https://github.com/anothrNi
 ## Additions
 
 - Template code from: https://github.com/mengdong/python-ml-structure
-
-Get started:
-- `python3 ./src/run.py --preprocess`
-- `python3 ./src/run.py --train`
-- `python3 ./src/run.py --serve`
-
-Build and run the HTTP server container:
-- `docker build -t nidhogg-http-server http_server`
-- `docker run -it -p 8080:8080 nidhogg-http-server`
