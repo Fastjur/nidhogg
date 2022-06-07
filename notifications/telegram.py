@@ -3,7 +3,7 @@
 import sys
 import os
 
-from TelegramNotifier import TelegramNotifier
+from notifications.telegram_notifier import TelegramNotifier
 
 if __name__ == '__main__':
     bot_token = os.environ['TELEGRAM_BOT_TOKEN']
@@ -16,15 +16,15 @@ if __name__ == '__main__':
     telegram_notifier = TelegramNotifier(bot_token, chat_id)
 
     if len(sys.argv) < 2:
-        print('Usage: {} <message_type>'.format(sys.argv[0]))
+        print(f'Usage: {sys.argv[0]} <message_type>')
         sys.exit(1)
 
     message_type = sys.argv[1]
     if message_type == 'pr_opened':
         if len(sys.argv) != 5:
             print(
-                'Usage: {} pr_opened <pr_author> <pr_title> <pr_url>'.format(
-                    sys.argv[0]))
+                f'Usage: {sys.argv[0]} pr_opened <pr_author> <pr_title> <pr_url>'
+            )
             sys.exit(1)
         pr_author = sys.argv[2]
         pr_title = sys.argv[3]
@@ -33,7 +33,9 @@ if __name__ == '__main__':
     elif message_type == 'low_precision':
         if len(sys.argv) != 6:
             print(
-                f"Usage: {sys.argv[0]} low_precision <pr_author> <pr_title> <pr_url> <model_precision>")
+                f"Usage: {sys.argv[0]} low_precision <pr_author> <pr_title>" +
+                " <pr_url> <model_precision>"
+            )
             sys.exit(1)
         [_, _, pr_author, pr_title, pr_url, model_precision] = sys.argv
         telegram_notifier.notify_low_precision(
