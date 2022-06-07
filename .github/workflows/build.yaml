@@ -82,12 +82,11 @@ jobs:
               })
             }
       - name: Model precision warning
-        if: ${{ github.event_name == 'pull_request' }}
         env:
           PRECISION_THRESHOLD: ${{ 0.4 }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        if: steps.read-model-metrics.outputs.avg-precision < env.PRECISION_THRESHOLD
+        if: ${{ steps.read-model-metrics.outputs.avg-precision < env.PRECISION_THRESHOLD && github.event_name == 'pull_request' }}
         run: |
           cd notifications
           poetry run python3 telegram.py low_precision \
